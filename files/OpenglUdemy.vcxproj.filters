@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{b3d4a0ce-4cc9-457c-b6b2-13eea37fcacb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{92721255-3bed-4a3a-b417-ba4d452c85f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Display">
+      <UniqueIdentifier>{4b0aacde-47a5-45b8-8c5b-aa250c0fc276}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Display">
+      <UniqueIdentifier>{a45243d8-e8e4-4dfa-9f4a-7d21c0483289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{3cf159b8-6040-4bfc-b37f-448378c0f92f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{7a058931-190b-4537-9b38-4413aad5ea8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderProgram">
+      <UniqueIdentifier>{0805c8e8-ff85-4d2e-b964-c761f830e91f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderProgram">
+      <UniqueIdentifier>{27c04ef3-4ff8-41f2-a3eb-b10940a12f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{b452cc54-b081-4ab7-b538-90d4a1086989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{9d88fb43-f079-4e23-949a-e08eac3ee1bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{0b210d27-deff-453d-a49f-cab3bb1669a2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Camera\Camera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Display\Display.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderProgram\ShaderProgram.cpp">
+      <Filter>Source Files\ShaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Mesh.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model\Texture2D.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Camera\Camera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Display\Display.h">
+      <Filter>Header Files\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Entity.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderProgram\ShaderProgram.h">
+      <Filter>Header Files\ShaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Texture2D.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model\Mesh.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\shaders\fragment.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\fragmentPicking.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\vertex.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\vertexPicking.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
