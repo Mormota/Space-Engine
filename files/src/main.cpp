@@ -80,6 +80,7 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
 		glfwPollEvents();
+		randomGui.setDisplay(width, height);
 
 
 

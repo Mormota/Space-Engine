@@ -71,8 +71,8 @@ bool Gui::onClick(GLFWwindow* window) {
 	int newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	if (newState == 0 && oldState == 1) {
 		if (
-			((dx < posX) && (posX < (dx + width))) &&
-			((dy < posY) && (posY < (dy + height)))) {
+			((dx < posX) && (posX < (dx + relativeWidth * displayWidth))) &&
+			((dy < posY) && (posY < (dy + relativeHeight * displayHeight)))) {
 			oldState = newState;
 			return true;
 		}
