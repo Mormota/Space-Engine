@@ -68,11 +68,14 @@ int main() {
 	float angle = 0.0f;
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
-	randomGui.setDisplay(width, height);
-	randomGui.scaleInPixels(300, 120);
-	randomGui.positionInPixels(10, 0, width, height);
+	randomGui.setDisplay(width, height, window);
+	randomGui.scaleInPixels(600, 400);
+	randomGui.positionInPixels(10, 10);
 
-
+	Gui exitGui = Gui("res/images/exit.png", guiShader);
+	exitGui.setDisplay(width, height, window);
+	exitGui.scaleInPixels(60, 60);
+	exitGui.positionInPixels(10, 10);
 
 	
 
@@ -80,7 +83,8 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
 		glfwPollEvents();
-		randomGui.setDisplay(width, height);
+		//randomGui.setDisplay(width, height);
+		exitGui.setDisplay(width, height, window);
 
 
 
@@ -97,14 +101,19 @@ int main() {
 
 
 
-		if (randomGui.onClick(window)) {
+		
+
+		if (exitGui.onClick()) {
+			std::cout << "Exit call sent" << std::endl;
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		} else if (randomGui.onClick()) {
 			if (gameState == inGame) {
 				gameState = inMenu;
 			}
 			else {
 				gameState = inGame;
 			}
-		}
+		};
 		//game state in game
 		if (gameState == inGame) {
 			planet.setRotation(0, 0, 0);
@@ -112,7 +121,7 @@ int main() {
 		}	
 
 		randomGui.render();
-		
+		exitGui.render();
 		
 		angle++;
 

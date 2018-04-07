@@ -6,11 +6,7 @@
 #include "../Model/Texture2D.h"
 
 
-void mouseButtonCallbackGUI(GLFWwindow* window, int button, int action, int mods) {
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		//return true;
-	}
-}
+
 
 
 Gui::Gui(const std::string& texturePath, ShaderProgram shader){
@@ -25,13 +21,19 @@ Gui::Gui(const std::string& texturePath, ShaderProgram shader){
 
 Gui::~Gui(){}
 
-void Gui::setDisplay(int displayWidth, int displayHeight) {
+void Gui::setDisplay(int displayWidth, int displayHeight, GLFWwindow* window) {
 	this->displayWidth = displayWidth;
 	this->displayHeight = displayHeight;
+	absoluteXoffset = (float)dx / displayWidth;
+	absoluteYoffset = (float)dy / displayHeight;
+
+	this->window = window;
+
+	std::cout << absoluteXoffset << std::endl;
 }
 
-void Gui::scaleInPixels(int width, int height, int displayWidth, int displayHeight) {
-	this->setDisplay(displayWidth, displayHeight);
+void Gui::scaleInPixels(int width, int height, int displayWidth, int displayHeight, GLFWwindow* window) {
+	this->setDisplay(displayWidth, displayHeight, window);
 	this->scaleInPixels(width, height);
 }
 
@@ -46,8 +48,8 @@ void Gui::scaleInPixels(int width, int height) {
 	Scale = glm::vec2(relativeWidth, relativeHeight);
 }
 
-void Gui::positionInPixels(int dx, int dy, int displayWidth, int displayHeight) {
-	this->setDisplay(displayWidth, displayHeight);
+void Gui::positionInPixels(int dx, int dy, int displayWidth, int displayHeight, GLFWwindow* window) {
+	this->setDisplay(displayWidth, displayHeight, window);
 	this->positionInPixels(dx, dy);
 }
 
@@ -56,23 +58,60 @@ void Gui::positionInPixels(int dx, int dy) {
 	this->dx = dx;
 	this->dy = dy;
 
-	float relativeYOffset = (float)((double)dy / (double)displayHeight) + 1.0f - relativeHeight;
-	float relativeXOffset = (float)((double)dx / (double)displayWidth) - 1.0f + relativeWidth;
+	absoluteXoffset = (float) dx / displayWidth;
+	absoluteYoffset = (float) dy / displayHeight;
+
+	float relativeXOffset = (float)(dx - (displayWidth / 2))/(displayWidth/2);
+	float relativeYOffset = -(float)(dy - displayHeight / 2) / (displayHeight / 2);
+
+	float offsetX = (float)(dx - displayWidth / 2) / (displayWidth / 2);
+	/*
+	if (dx > displayWidth / 2) {
+		relativeXOffset -= relativeWidth;
+	}
+	else {
+		relativeXOffset += relativeWidth;
+	}
+
+	if (dy > displayHeight / 2) {
+		relativeYOffset += relativeHeight;
+	}
+	else {
+		relativeYOffset -= relativeHeight;
+	}
+	*/
+
+	relativeXOffset += relativeWidth;
+	relativeYOffset -= relativeHeight;
+	//double x = (double)((1.0 + dx )* (2.0 / displayWidth) + (1.0 / displayWidth) = (2.0 * dx + 1.0) / displayWidth - 1.0);
+
+	float posX = -1.0 + dx * (2/displayWidth) + (1/displayWidth);
+
+	float positionX;
+	if (dx > (displayWidth / 2)) {
+		positionX = (float)(offsetX + (relativeWidth / 2));
+	}
+	else {
+		positionX = (float)(offsetX - (relativeWidth / 2));
+	}
+	
+
+	std::cout << absoluteXoffset << std::endl;
 
 	Position.y = relativeYOffset;
 	Position.x = relativeXOffset;
 }
 
 
-bool Gui::onClick(GLFWwindow* window) {
+bool Gui::onClick() {
 	double posX, posY;
 	glfwGetCursorPos(window, &posX, &posY);
-	static int oldState = 0;
+	
 	int newState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 	if (newState == 0 && oldState == 1) {
 		if (
-			((dx < posX) && (posX < (dx + relativeWidth * displayWidth))) &&
-			((dy < posY) && (posY < (dy + relativeHeight * displayHeight)))) {
+			((absoluteXoffset * displayWidth <= posX) && (posX <= (absoluteXoffset * displayWidth + relativeWidth * displayWidth))) &&
+			((absoluteYoffset * displayHeight <= posY) && (posY <= (absoluteYoffset * displayHeight + relativeHeight * displayHeight)))) {
 			oldState = newState;
 			return true;
 		}

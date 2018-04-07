@@ -94,6 +94,8 @@ GLFWwindow* Display::initWindow(GLFWwindow* window) {
 	glfwMakeContextCurrent(window);
 	//glfwSetKeyCallback(window, keyboardCallback);
 
+	glEnable(GL_CULL_FACE_MODE);
+
 	return window;
 }
 

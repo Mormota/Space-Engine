@@ -19,24 +19,26 @@ public:
 
 	void render();
 
-	void setDisplay(int displayWidth, int displayHeight);
+	void setDisplay(int displayWidth, int displayHeight, GLFWwindow* window);
 
-	void scaleInPixels(int width, int height, int displayWidth, int displayHeight);
+	void scaleInPixels(int width, int height, int displayWidth, int displayHeight, GLFWwindow* window);
 	void scaleInPixels(int width, int height);
 
-	void positionInPixels(int dx, int dy, int displayWidth, int displayHeight);
+	void positionInPixels(int dx, int dy, int displayWidth, int displayHeight, GLFWwindow* window);
 	void positionInPixels(int dx, int dy);
 
-	bool onClick(GLFWwindow* window);
+	bool onClick();
 	bool pressed = false;
 private:
 	Mesh guiModel;
 	ShaderProgram guiShader;
 	Texture2D texture;
+	GLFWwindow* window;
 
 	glm::vec2 align;
 
 	float relativeWidth, relativeHeight;
+	float absoluteXoffset, absoluteYoffset;
 	int width, height;
 	int dx, dy;
 
@@ -46,6 +48,8 @@ private:
 	glm::vec2 Position;
 	glm::vec2 Scale;
 	float rot = 0;
+
+	int oldState = 0;
 
 };
 
