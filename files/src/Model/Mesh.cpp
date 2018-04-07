@@ -29,6 +29,8 @@ Mesh::~Mesh(){
 	glDeleteBuffers(1, &VBO);
 }
 
+
+
 bool Mesh::loadOBJ(const std::string& filename){
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> tempVertices;

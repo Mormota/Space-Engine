@@ -41,24 +41,6 @@ void Entity::setRotation(float rotX, float rotY, float rotZ) {
 
 Entity::~Entity() {}
 
-void Entity::pickingRender() {
-	modelMatrix = glm::translate(glm::mat4(), Position) *
-		glm::scale(glm::mat4(), Scale) *
-		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
-		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
-		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	//shader.setUniform("model", modelMatrix);
-
-	pickingShader.setUniform("model", modelMatrix);
-
-	pickingShader.setUniform("PickingColor", glm::vec4(0.0, 1.0, 1.0, 1.01));
-
-	texture.bind(0);
-	mesh.draw();
-	texture.unBind();
-}
-
 void Entity::render() {
 	modelMatrix = glm::translate(glm::mat4(), Position) * 
 		glm::scale(glm::mat4(), Scale) *

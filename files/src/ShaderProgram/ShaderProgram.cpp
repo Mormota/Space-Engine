@@ -131,12 +131,31 @@ GLint ShaderProgram::getUniformLocation(const GLchar* name) {
 	return UniformLocations[name];
 }
 
+void ShaderProgram::stop() {
+	glUseProgram(0);
+}
+
+void ShaderProgram::setShaderProgram(GLuint program) {
+	glUseProgram(program);
+}
 
 void ShaderProgram::cleanUp() {
 	UniformLocations.clear();
 	glDeleteProgram(shaderHandle);
 }
 
-GLuint ShaderProgram::getProgramID()const {
+GLuint ShaderProgram::getProgramID() {
 	return shaderHandle;
+}
+
+GuiShader::GuiShader(const char* vertexFileName, const char* fragmentFileName) {
+	ShaderProgram::loadShaders(vertexFileName, fragmentFileName);
+}
+
+void GuiShader::cleanUp() {
+	ShaderProgram::cleanUp();
+}
+
+void GuiShader::use() {
+	ShaderProgram::use();
 }

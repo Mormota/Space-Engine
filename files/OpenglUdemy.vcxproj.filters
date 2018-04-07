@@ -42,6 +42,12 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{0b210d27-deff-453d-a49f-cab3bb1669a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Gui">
+      <UniqueIdentifier>{186393e0-7d97-4369-a7d0-7d7065f1133d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Gui">
+      <UniqueIdentifier>{1a325aae-cb3a-4106-9a25-806c68a02efe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera\Camera.cpp">
@@ -65,6 +71,9 @@
     <ClCompile Include="src\Model\Texture2D.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="src\gui\Gui.cpp">
+      <Filter>Source Files\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera\Camera.h">
@@ -85,6 +94,9 @@
     <ClInclude Include="src\Model\Mesh.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
+    <ClInclude Include="src\gui\Gui.h">
+      <Filter>Header Files\Gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\shaders\fragment.glsl">
@@ -97,6 +109,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="bin\shaders\vertexPicking.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\guiFragment.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\guiVertex.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

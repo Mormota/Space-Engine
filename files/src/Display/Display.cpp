@@ -125,21 +125,10 @@ void Display::useShader(ShaderProgram shader, Camera camera) {
 
 	shader.setUniform("view", viewMatrix);
 	shader.setUniform("projection", projectionMatrix);
+	glUseProgram(0);
 	shader.use();
 }
 
-void Display::usePickingShader(ShaderProgram shader, Camera camera) {
-	pickingShader = shader;
-	glm::mat4 viewMatrix, projectionMatrix;
-
-	viewMatrix = camera.getViewMatrix();
-
-	projectionMatrix = glm::perspective(radians(45.0f), (float)width / height, 0.1f, 1000.0f);
-
-	shader.setUniform("view", viewMatrix);
-	shader.setUniform("projection", projectionMatrix);
-	shader.use();
-}
 
 void Display::cleanUpPickingShader() {
 	pickingShader.cleanUp();

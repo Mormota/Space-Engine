@@ -22,7 +22,6 @@ public:
 	void setPickingShader(ShaderProgram pickingShader);
 	
 	void render();
-	void pickingRender();
 
 	//void setup();
 
@@ -46,6 +45,5 @@ private:
 	glm::vec3 Scale;
 	float rotX, rotY, rotZ;
 };
-
 #endif // !ENTITY_H
 

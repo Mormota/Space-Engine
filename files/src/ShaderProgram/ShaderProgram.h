@@ -33,7 +33,10 @@ public:
 
 	void setUniform(const GLchar* name, const glm::mat4& v);
 
-	GLuint getProgramID()const;
+	GLuint getProgramID();
+
+	void stop();
+	void setShaderProgram(GLuint program);
 
 private:
 	string fileToString(const string& filename);
@@ -43,6 +46,15 @@ private:
 
 	GLuint shaderHandle;
 	map<string, GLint> UniformLocations;
+};
+
+class GuiShader : public ShaderProgram {
+public:
+	GuiShader(const char* guiVertexFileName, const char* guiFragmentFileName);
+
+	void use();
+	void cleanUp();
+
 };
 
 #endif // SHADER_PROGRAM_H

@@ -23,6 +23,7 @@ public:
 	~Mesh();
 
 	bool loadOBJ(const std::string& fileName);
+	void guiLoader();
 	void draw();
 
 private:

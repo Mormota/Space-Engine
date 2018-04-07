@@ -14,6 +14,7 @@
 #include "Model\Texture2D.h"
 #include "Camera\Camera.h"
 #include "Entity\Entity.h"
+#include "gui\Gui.h"
 #include "Model\Mesh.h"
 using namespace glm;
 
@@ -27,7 +28,7 @@ enum gameStates {
 	inMenu
 };
 
-gameStates gameState = inGame;
+gameStates gameState = inMenu;
 
 
 
@@ -38,23 +39,42 @@ float cameraRadius = 50.0f;
 void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mode);
 void resizeCallback(GLFWwindow* window, int width, int height);
 void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
+
+
+
 int main() {
 	Display display = Display(width, height, "Space Engine");
 	window = display.initOpenGl();
 	if (window == NULL) return -1;
 
+	
+
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
 	glfwSetWindowSizeCallback(window, resizeCallback);
 	glfwSetKeyCallback(window, keyboardCallback);
+	
 
 	Camera camera;
 
 	ShaderProgram shader;
 	shader.loadShaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 
+	ShaderProgram guiShader;
+	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
 
-	Entity planet = Entity("res/planetscheme.obj", "res/images/planet.png", false, shader);
+	
+
+	Entity planet = Entity("res/planetScheme.obj", "res/images/planet.png", false, shader);
 	float angle = 0.0f;
+
+	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
+	randomGui.setDisplay(width, height);
+	randomGui.scaleInPixels(300, 120);
+	randomGui.positionInPixels(10, 0, width, height);
+
+
+
+	
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -76,27 +96,32 @@ int main() {
 
 
 
-
-
-
-
-
-
+		if (randomGui.onClick(window)) {
+			if (gameState == inGame) {
+				gameState = inMenu;
+			}
+			else {
+				gameState = inGame;
+			}
+		}
 		//game state in game
 		if (gameState == inGame) {
 			planet.setRotation(0, 0, 0);
 			planet.render();
-
 		}	
+
+		randomGui.render();
 		
 		
 		angle++;
 
 
 		//Display updater
+		shader.use();
 		display.update();
 	}
 	shader.cleanUp();
+	guiShader.cleanUp();
 	glfwTerminate();
 	return 0;
 }
