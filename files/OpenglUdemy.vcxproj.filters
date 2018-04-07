@@ -117,5 +117,6 @@
     <None Include="bin\shaders\guiVertex.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="..\.gitignore" />
   </ItemGroup>
 </Project>

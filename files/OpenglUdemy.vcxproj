@@ -38,6 +38,7 @@
     <ClInclude Include="src\ShaderProgram\ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.gitignore" />
     <None Include="bin\shaders\fragment.glsl" />
     <None Include="bin\shaders\fragmentPicking.glsl" />
     <None Include="bin\shaders\guiFragment.glsl" />

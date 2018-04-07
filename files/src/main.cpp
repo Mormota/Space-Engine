@@ -68,14 +68,10 @@ int main() {
 	float angle = 0.0f;
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
-	randomGui.setDisplay(width, height, window);
-	randomGui.scaleInPixels(600, 400);
-	randomGui.positionInPixels(10, 10);
+	
 
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
-	exitGui.setDisplay(width, height, window);
-	exitGui.scaleInPixels(60, 60);
-	exitGui.positionInPixels(10, 10);
+	
 
 	
 
@@ -83,9 +79,8 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
 		glfwPollEvents();
-		//randomGui.setDisplay(width, height);
+		randomGui.setDisplay(width, height, window);
 		exitGui.setDisplay(width, height, window);
-
 
 
 
@@ -102,7 +97,7 @@ int main() {
 
 
 		
-
+		//GUI actions
 		if (exitGui.onClick()) {
 			std::cout << "Exit call sent" << std::endl;
 			glfwSetWindowShouldClose(window, GL_TRUE);
@@ -119,6 +114,14 @@ int main() {
 			planet.setRotation(0, 0, 0);
 			planet.render();
 		}	
+		//GUI
+		randomGui.setDisplay(width, height, window);
+		randomGui.scaleInPixels(600, 400);
+		randomGui.positionInPixels(10, 10);
+
+		exitGui.setDisplay(width, height, window);
+		exitGui.scaleInPixels(60, 60);
+		exitGui.positionInPixels(width - 70, 10);
 
 		randomGui.render();
 		exitGui.render();
@@ -158,7 +161,7 @@ void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int
 void resizeCallback(GLFWwindow* window, int newWidth, int newHeight) {
 	width = newWidth;
 	height = newHeight;
-	glViewport(0, 0, newWidth, newHeight);
+	glViewport(0, 0, width, height);
 }
 
 void mouseMoveCallback(GLFWwindow* window, double posX, double posY) {

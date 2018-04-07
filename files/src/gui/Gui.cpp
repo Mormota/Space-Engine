@@ -28,8 +28,6 @@ void Gui::setDisplay(int displayWidth, int displayHeight, GLFWwindow* window) {
 	absoluteYoffset = (float)dy / displayHeight;
 
 	this->window = window;
-
-	std::cout << absoluteXoffset << std::endl;
 }
 
 void Gui::scaleInPixels(int width, int height, int displayWidth, int displayHeight, GLFWwindow* window) {
@@ -64,39 +62,9 @@ void Gui::positionInPixels(int dx, int dy) {
 	float relativeXOffset = (float)(dx - (displayWidth / 2))/(displayWidth/2);
 	float relativeYOffset = -(float)(dy - displayHeight / 2) / (displayHeight / 2);
 
-	float offsetX = (float)(dx - displayWidth / 2) / (displayWidth / 2);
-	/*
-	if (dx > displayWidth / 2) {
-		relativeXOffset -= relativeWidth;
-	}
-	else {
-		relativeXOffset += relativeWidth;
-	}
-
-	if (dy > displayHeight / 2) {
-		relativeYOffset += relativeHeight;
-	}
-	else {
-		relativeYOffset -= relativeHeight;
-	}
-	*/
-
 	relativeXOffset += relativeWidth;
 	relativeYOffset -= relativeHeight;
-	//double x = (double)((1.0 + dx )* (2.0 / displayWidth) + (1.0 / displayWidth) = (2.0 * dx + 1.0) / displayWidth - 1.0);
 
-	float posX = -1.0 + dx * (2/displayWidth) + (1/displayWidth);
-
-	float positionX;
-	if (dx > (displayWidth / 2)) {
-		positionX = (float)(offsetX + (relativeWidth / 2));
-	}
-	else {
-		positionX = (float)(offsetX - (relativeWidth / 2));
-	}
-	
-
-	std::cout << absoluteXoffset << std::endl;
 
 	Position.y = relativeYOffset;
 	Position.x = relativeXOffset;
