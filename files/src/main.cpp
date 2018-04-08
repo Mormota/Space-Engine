@@ -22,12 +22,12 @@ int width = 1280, height = 720;
 GLFWwindow* window = NULL;
 bool wireFrame = false;
 
+
 enum gameStates {
 	Initializing,
 	inGame,
 	inMenu
 };
-
 gameStates gameState = inMenu;
 
 
@@ -64,12 +64,10 @@ int main() {
 
 	
 
-	Entity planet = Entity("res/planetScheme.obj", "res/images/planet.png", false, shader);
-	float angle = 0.0f;
+	Entity planet = Entity("res/planetScheme.obj", "res/images/planet.png", false, shader, 355);
+
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
-	
-
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
 	
 
@@ -95,6 +93,8 @@ int main() {
 		display.useShader(shader, camera);
 
 
+		double posX, posY;
+		glfwGetCursorPos(window, &posX, &posY);
 
 		
 		//GUI actions
@@ -109,11 +109,41 @@ int main() {
 				gameState = inGame;
 			}
 		};
+
 		//game state in game
 		if (gameState == inGame) {
+			
+			//object picking
 			planet.setRotation(0, 0, 0);
+			planet.pickingRender();
+
+			if (display.mouseLeftPressed()) {
+				glFlush();
+				glFinish();
+
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+				unsigned char data[4];
+				glReadPixels(posX, height - posY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+				int pickedID =
+					data[0] +
+					data[1] * 256 +
+					data[2] * 256 * 256;
+
+				std::cout << pickedID << std::endl;
+			}
+
+			
+
+
+			//object rendering
+			display.initDisplay();
 			planet.render();
+
 		}	
+
+
+
 		//GUI
 		randomGui.setDisplay(width, height, window);
 		randomGui.scaleInPixels(600, 400);
@@ -125,8 +155,6 @@ int main() {
 
 		randomGui.render();
 		exitGui.render();
-		
-		angle++;
 
 
 		//Display updater

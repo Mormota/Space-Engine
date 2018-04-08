@@ -26,6 +26,9 @@ public:
 	void cleanUpPickingShader();
 
 	void update();
+	bool mouseLeftPressed();
+	bool mouseRightPressed();
+	bool mouseMiddlePressed();
 private:
 
 	ShaderProgram pickingShader;
@@ -42,6 +45,8 @@ private:
 	GLFWwindow* pWindow = NULL;
 
 	double fpsCount;
+
+	int oldLeftState = 0, oldRightState = 0, oldMiddleState = 0;
 
 
 };

@@ -4,10 +4,14 @@
 #include "../Model/Texture2D.h"
 
 
-Entity::Entity(const std::string& Model, const std::string& texturePath, bool generateMipMaps, ShaderProgram shaderProgram) {
+Entity::Entity(const std::string& Model, const std::string& texturePath, bool generateMipMaps, ShaderProgram shaderProgram, int id) {
 	mesh.loadOBJ(Model);
 	texture.loadTexture(texturePath);
 	shader = shaderProgram;
+
+	r = (id & 0x000000FF) >> 0;
+	g = (id & 0x0000FF00) >> 8;
+	b = (id & 0x00FF0000) >> 16;
 
 	Position = glm::vec3(0.0f, 0.0f, 0.0f);
 	Scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -38,6 +42,12 @@ void Entity::setRotation(float rotX, float rotY, float rotZ) {
 	this->rotZ = rotZ;
 }
 
+void Entity::setID(int id) {
+	r = (id & 0x000000FF) >> 0;
+	g = (id & 0x0000FF00) >> 8;
+	b = (id & 0x00FF0000) >> 16;
+}
+
 
 Entity::~Entity() {}
 
@@ -50,11 +60,24 @@ void Entity::render() {
 	
 	shader.setUniform("model", modelMatrix);
 
-	/*pickingShader.setUniform("model", modelMatrix);
-
-	pickingShader.setUniform("PickingColor", glm::vec4(0.0, 1.0, 1.0, 1.01));*/
+	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
+	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
 
 	texture.bind(0);
 	mesh.draw();
 	texture.unBind();
+}
+
+void Entity::pickingRender() {
+	modelMatrix = glm::translate(glm::mat4(), Position) *
+		glm::scale(glm::mat4(), Scale) *
+		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	shader.setUniform("model", modelMatrix);
+	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
+	shader.setUniform("pickingVector", glm::vec2(1.0f, 0.0f));
+
+	mesh.draw();
 }

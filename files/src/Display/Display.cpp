@@ -131,7 +131,51 @@ void Display::useShader(ShaderProgram shader, Camera camera) {
 	shader.use();
 }
 
+void Display::usePickingShader(ShaderProgram shader, Camera camera) {
+	glm::mat4 viewMatrix, projectionMatrix;
+
+	viewMatrix = camera.getViewMatrix();
+
+	projectionMatrix = glm::perspective(radians(60.0f), (float)width / height, 0.1f, 1000.0f);
+
+	shader.setUniform("view", viewMatrix);
+	shader.setUniform("projection", projectionMatrix);
+	glUseProgram(0);
+	shader.use();
+}
+
 
 void Display::cleanUpPickingShader() {
 	pickingShader.cleanUp();
+}
+
+bool Display::mouseLeftPressed() {
+	int newState = glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_LEFT);
+	if (newState == 0 && oldLeftState == 1){
+		oldLeftState = newState;
+		return true;
+	};
+	oldLeftState = newState;
+
+	return false;
+}
+bool Display::mouseRightPressed() {
+	int newState = glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_RIGHT);
+	if (newState == 0 && oldRightState == 1) {
+		oldRightState = newState;
+		return true;
+	};
+	oldRightState = newState;
+
+	return false;
+}
+bool Display::mouseMiddlePressed() {
+	int newState = glfwGetMouseButton(pWindow, GLFW_MOUSE_BUTTON_MIDDLE);
+	if (newState == 0 && oldMiddleState == 1) {
+		oldMiddleState = newState;
+		return true;
+	};
+	oldMiddleState = newState;
+
+	return false;
 }

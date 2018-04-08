@@ -12,7 +12,7 @@
 Gui::Gui(const std::string& texturePath, ShaderProgram shader){
 	texture.loadTexture(texturePath);
 	this->guiShader = shader;
-	guiModel.loadOBJ("gui.obj");
+	guiModel.loadOBJ("res/models/gui.obj");
 
 	Position = glm::vec2(0.0f, 0.0f);
 	Scale = glm::vec2(0.08f, 0.24f);

@@ -16,12 +16,13 @@
 class Entity
 {
 public:
-	Entity(const std::string& Model, const std::string& texturePath, bool generateMipMaps, ShaderProgram shader);
+	Entity(const std::string& Model, const std::string& texturePath, bool generateMipMaps, ShaderProgram shader, int id = 1);
 	virtual ~Entity();
 
 	void setPickingShader(ShaderProgram pickingShader);
 	
 	void render();
+	void pickingRender();
 
 	//void setup();
 
@@ -44,6 +45,8 @@ private:
 	glm::vec3 Rotation;
 	glm::vec3 Scale;
 	float rotX, rotY, rotZ;
+
+	int r, g, b;
 };
 #endif // !ENTITY_H
 
