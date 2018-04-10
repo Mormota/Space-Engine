@@ -1,12 +1,23 @@
 //Libraries
 #define GLEW_STATIC
+#define _CRT_SECURE_NO_DEPRECATE
+#include <stdio.h>
+#include <cstdlib>
 #include <iostream>
+#include <windows.h>
 #include <sstream>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <cstring>
+
+
 
 #include "GL/glew.h"
 #include "GLFW\glfw3.h"
 #include "glm\gtc\matrix_transform.hpp"
+#include "openal\al.h"
+#include "openal\alc.h"
 
 //Custom includes
 #include "Display/Display.h"
@@ -16,11 +27,21 @@
 #include "Entity\Entity.h"
 #include "gui\Gui.h"
 #include "Model\Mesh.h"
+#include "SoundSystem\SoundSystem.h"
+
+#define APIENTRY    WINAPI
 using namespace glm;
 
 int width = 1280, height = 720;
 GLFWwindow* window = NULL;
+
+
+
+
+
+
 bool wireFrame = false;
+bool boundingBoxes = false;
 
 
 enum gameStates {
@@ -40,6 +61,13 @@ void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int
 void resizeCallback(GLFWwindow* window, int width, int height);
 void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
 
+//AudioFile<double> audioFile;
+
+
+
+ALCdevice* device;
+ALCcontext* context;
+
 
 
 int main() {
@@ -47,7 +75,20 @@ int main() {
 	window = display.initOpenGl();
 	if (window == NULL) return -1;
 
+	//openAL
+	device = alcOpenDevice(NULL);
+	context = alcCreateContext(device, NULL);
+	if (device == NULL) std::cout << "cannot open sound card" << std::endl;
+	if (context == NULL) std::cout << "cannot open context" << std::endl;
+	alcMakeContextCurrent(context);
+
+	SoundSystem testSound = SoundSystem("res/sounds/sound_1.wav");
+
+
+
 	
+		
+
 
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
 	glfwSetWindowSizeCallback(window, resizeCallback);
@@ -69,16 +110,18 @@ int main() {
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
-	
 
+	Gui center = Gui("res/images/bg.jpg", guiShader);
 	
-
+	testSound.play();
+	
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
 		glfwPollEvents();
 		randomGui.setDisplay(width, height, window);
 		exitGui.setDisplay(width, height, window);
+		center.setDisplay(width, height, window);
 
 
 
@@ -96,6 +139,15 @@ int main() {
 		double posX, posY;
 		glfwGetCursorPos(window, &posX, &posY);
 
+
+		center.setDisplay(width, height, window);
+		center.scaleInPixels(600, 600);
+		exitGui.positionInPixels(width / 2 - 300, height / 2 - 300);
+
+		
+
+
+		shader.use();
 		
 		//GUI actions
 		if (exitGui.onClick()) {
@@ -134,12 +186,11 @@ int main() {
 			}
 
 			
-
-
 			//object rendering
-			display.initDisplay();
-			planet.render();
-
+			if (!boundingBoxes) {
+				display.initDisplay();
+				planet.render();
+			}
 		}	
 
 
@@ -153,9 +204,13 @@ int main() {
 		exitGui.scaleInPixels(60, 60);
 		exitGui.positionInPixels(width - 70, 10);
 
+		center.render();
+
+
 		randomGui.render();
 		exitGui.render();
 
+		
 
 		//Display updater
 		shader.use();
@@ -184,6 +239,8 @@ void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int
 		if (wireFrame) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+
+	if (key == GLFW_KEY_F9 && action == GLFW_PRESS) boundingBoxes = !boundingBoxes;
 }
 
 void resizeCallback(GLFWwindow* window, int newWidth, int newHeight) {

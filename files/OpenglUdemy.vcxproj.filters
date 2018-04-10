@@ -48,6 +48,9 @@
     <Filter Include="Header Files\Gui">
       <UniqueIdentifier>{1a325aae-cb3a-4106-9a25-806c68a02efe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SoundSystem">
+      <UniqueIdentifier>{506735d7-0eda-476a-a0fc-6e57b886c319}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera\Camera.cpp">
@@ -74,6 +77,12 @@
     <ClCompile Include="src\gui\Gui.cpp">
       <Filter>Source Files\Gui</Filter>
     </ClCompile>
+    <ClCompile Include="src\gui\GameGui.cpp">
+      <Filter>Source Files\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundSystem\SoundSystem.cpp">
+      <Filter>Source Files\SoundSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera\Camera.h">
@@ -97,18 +106,18 @@
     <ClInclude Include="src\gui\Gui.h">
       <Filter>Header Files\Gui</Filter>
     </ClInclude>
+    <ClInclude Include="src\gui\GameGui.h">
+      <Filter>Header Files\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundSystem\SoundSystem.h">
+      <Filter>Source Files\SoundSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\shaders\fragment.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="bin\shaders\fragmentPicking.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="bin\shaders\vertex.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="bin\shaders\vertexPicking.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="bin\shaders\guiFragment.glsl">

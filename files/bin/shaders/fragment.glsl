@@ -15,9 +15,7 @@ out vec4 colorOut;
 void main(){
 	float lightLevel = dot(surfaceNormal, toLightVector);
 
-	int isPicking = 0;
-
-	float brightness = max(lightLevel, 0.3);
+	float brightness = max(lightLevel, 0.2);
 	if(pickingVector.x != 1.0f){
 		colorOut = brightness * mix(texture(textureSampler, UV), texture(texture2Sampler, UV), 0.5f);
 	} else {
