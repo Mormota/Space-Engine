@@ -82,14 +82,7 @@ int main() {
 	if (context == NULL) std::cout << "cannot open context" << std::endl;
 	alcMakeContextCurrent(context);
 
-
-
-
-
-
 	SoundSystem testSound = SoundSystem("res/sounds/sound_1.wav");
-	testSound.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
-	testSound.setLooping(false);
 
 
 
@@ -117,8 +110,11 @@ int main() {
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
-	Gui center = Gui("res/images/bg.jpg", guiShader);
 
+	Gui center = Gui("res/images/bg.jpg", guiShader);
+	
+	testSound.play();
+	
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
@@ -150,6 +146,21 @@ int main() {
 
 		
 
+
+		shader.use();
+		
+		//GUI actions
+		if (exitGui.onClick()) {
+			std::cout << "Exit call sent" << std::endl;
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		} else if (randomGui.onClick()) {
+			if (gameState == inGame) {
+				gameState = inMenu;
+			}
+			else {
+				gameState = inGame;
+			}
+		};
 
 		//game state in game
 		if (gameState == inGame) {
@@ -193,24 +204,8 @@ int main() {
 		exitGui.scaleInPixels(60, 60);
 		exitGui.positionInPixels(width - 70, 10);
 
-		//center.render();
-		//GUI actions
-		if (exitGui.onClick()) {
-			if (testSound.isPlaying()) {
-				testSound.pause();
-			}
-			else {
-				testSound.resume();
-			}
-		}
-		else if (randomGui.onClick()) {
-			if (gameState == inGame) {
-				gameState = inMenu;
-			}
-			else {
-				gameState = inGame;
-			}
-		};
+		center.render();
+
 
 		randomGui.render();
 		exitGui.render();
