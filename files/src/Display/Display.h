@@ -29,6 +29,11 @@ public:
 	bool mouseLeftPressed();
 	bool mouseRightPressed();
 	bool mouseMiddlePressed();
+
+	void getEntityId(int& id);
+
+	double getDeltaTime();
+	void setDeltaTime();
 private:
 
 	ShaderProgram pickingShader;
@@ -45,8 +50,10 @@ private:
 	GLFWwindow* pWindow = NULL;
 
 	double fpsCount;
+	double deltaTime;
 
 	int oldLeftState = 0, oldRightState = 0, oldMiddleState = 0;
+	double lastFrame = 0;
 
 
 };

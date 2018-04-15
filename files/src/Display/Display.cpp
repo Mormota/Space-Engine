@@ -57,7 +57,16 @@ void Display::getFrames() {
 	frameCount++;
 }
 
+void Display::setDeltaTime() {
+	double currentFrame = glfwGetTime();
+	deltaTime = currentFrame - lastFrame;
+	lastFrame = currentFrame;
 
+}
+
+double Display::getDeltaTime() {
+	return deltaTime;
+}
 
 bool Display::initGlfw() {
 	if (!glfwInit()) {
@@ -178,4 +187,28 @@ bool Display::mouseMiddlePressed() {
 	oldMiddleState = newState;
 
 	return false;
+}
+
+void Display::getEntityId(int& id) {
+	double posX, posY;
+	glfwGetCursorPos(pWindow, &posX, &posY);
+
+
+	if (this->mouseLeftPressed()) {
+		glFlush();
+		glFinish();
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		unsigned char data[4];
+		glReadPixels(posX, height - posY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		int pickedID =
+			data[0] +
+			data[1] * 256 +
+			data[2] * 256 * 256;
+		//std::cout << pickedID << std::endl;
+		id = pickedID;
+		
+	}
+	
 }

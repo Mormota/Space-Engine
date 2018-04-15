@@ -14,6 +14,8 @@ public:
 	virtual ~Texture2D();
 
 	bool loadTexture(const string& fileName, bool generateMipMaps = true);
+
+	GLuint getID();
 	void bind(GLuint texUnit = 0);
 	void unBind(GLuint texUnit = 0);
 

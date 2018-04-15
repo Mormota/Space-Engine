@@ -46,3 +46,7 @@ void Camera::updateCameraVectors() {
 	cameraPosition.y = cameraTargetPos.y + cameraRadius * sinf(cameraPitch);
 	cameraPosition.z = cameraTargetPos.z + cameraRadius * cosf(cameraPitch) * cosf(cameraYaw);
 }
+
+glm::vec3 Camera::getCamPos() {
+	return cameraPosition;
+}

@@ -51,6 +51,12 @@
     <Filter Include="Source Files\SoundSystem">
       <UniqueIdentifier>{506735d7-0eda-476a-a0fc-6e57b886c319}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\RendererEngine">
+      <UniqueIdentifier>{095757c7-158b-438f-9b45-d2ebfd9e3f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RendererEngine">
+      <UniqueIdentifier>{0a9cf3c1-a2fb-4745-946a-8c775924f933}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera\Camera.cpp">
@@ -77,11 +83,17 @@
     <ClCompile Include="src\gui\Gui.cpp">
       <Filter>Source Files\Gui</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui\GameGui.cpp">
-      <Filter>Source Files\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="src\SoundSystem\SoundSystem.cpp">
       <Filter>Source Files\SoundSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\Text.cpp">
+      <Filter>Source Files\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RendererEngine\RendererEngine.cpp">
+      <Filter>Source Files\RendererEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity\Planet.cpp">
+      <Filter>Source Files\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,11 +118,17 @@
     <ClInclude Include="src\gui\Gui.h">
       <Filter>Header Files\Gui</Filter>
     </ClInclude>
-    <ClInclude Include="src\gui\GameGui.h">
-      <Filter>Header Files\Gui</Filter>
-    </ClInclude>
     <ClInclude Include="src\SoundSystem\SoundSystem.h">
       <Filter>Source Files\SoundSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\Text.h">
+      <Filter>Header Files\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RendererEngine\RendererEngine.h">
+      <Filter>Header Files\RendererEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Planet.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

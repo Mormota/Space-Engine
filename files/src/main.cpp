@@ -4,13 +4,12 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <iostream>
-#include <windows.h>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
+#include <vector>
 
 
 #include "GL/glew.h"
@@ -28,6 +27,9 @@
 #include "gui\Gui.h"
 #include "Model\Mesh.h"
 #include "SoundSystem\SoundSystem.h"
+#include "gui\Text.h"
+#include "RendererEngine\RendererEngine.h"
+#include "Entity\Planet.h"
 
 #define APIENTRY    WINAPI
 using namespace glm;
@@ -37,29 +39,37 @@ GLFWwindow* window = NULL;
 
 
 
-
-
-
 bool wireFrame = false;
 bool boundingBoxes = false;
 
 
 enum gameStates {
 	Initializing,
+	inMainMenu,
+	inIngameMenu,
+	inPauseMenu,
+	inHelpMenu,
 	inGame,
-	inMenu
+	saving,
+	quiting,
+	credits,
+	other
 };
-gameStates gameState = inMenu;
+gameStates gameState = inGame;
 
-
+struct PLANET {
+	Entity data;
+};
 
 float cameraYaw = 0.0f;
 float cameraPitch = 0.0f;
 float cameraRadius = 50.0f;
+vec3 targetPosition(0.0f, 0.0f, 0.0f);
 
 void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mode);
 void resizeCallback(GLFWwindow* window, int width, int height);
 void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 //AudioFile<double> audioFile;
 
@@ -68,12 +78,66 @@ void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
 ALCdevice* device;
 ALCcontext* context;
 
+std::vector<Entity> entites;
+std::vector<Planet> planetsTemp;
+std::vector<Planet> planets;
+
+Camera camera;
+
+ShaderProgram shader;
+ShaderProgram guiShader;
+
+
+RendererEngine renderer = RendererEngine(shader);
+
+bool loadReady = false;
+bool loadInProgress = false;
+
+void loadEntities() {
+	//alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+	loadInProgress = true;
+
+	Mesh planet;
+	planet.loadOBJ("res/planetScheme.obj");
+
+	Texture2D texture;
+	texture.loadTexture("res/images/planet.png");
+
+	SoundSystem sound = SoundSystem("res/sounds/bounce.wav");
+	sound.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
+	sound.setLooping(true);
+	//sound.play();
+
+	for (int i = 0; i < 1; i++) {
+		Entity planeta = Entity(planet, texture, shader, 100);
+		planeta.setPosition(glm::vec3(i * 6 - 6, 0.0f, 0.0f));
+		planeta.setID(25);
+		planeta.addSound("res/sounds/ships/basic_selfmade.wav");
+		//planeta.playSound();
+
+		Planet moon = Planet(planet, texture, shader, 36);
+		//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
+		moon.setID(12);
+
+		entites.push_back(planeta);
+		planets.push_back(moon);
+
+	}
+
+	loadReady = true;
+	loadInProgress = false;
+}
+
 
 
 int main() {
 	Display display = Display(width, height, "Space Engine");
 	window = display.initOpenGl();
 	if (window == NULL) return -1;
+	glfwSetCursorPosCallback(window, mouseMoveCallback);
+	glfwSetWindowSizeCallback(window, resizeCallback);
+	glfwSetKeyCallback(window, keyboardCallback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	//openAL
 	device = alcOpenDevice(NULL);
@@ -81,52 +145,68 @@ int main() {
 	if (device == NULL) std::cout << "cannot open sound card" << std::endl;
 	if (context == NULL) std::cout << "cannot open context" << std::endl;
 	alcMakeContextCurrent(context);
+	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 
-	SoundSystem testSound = SoundSystem("res/sounds/sound_1.wav");
+	//bgSound
+	SoundSystem bgMusic = SoundSystem("res/sounds/sound_1.wav");
+	bgMusic.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
+	bgMusic.setLooping(true);
+	//bgMusic.play();
 
 
-
-	
-		
-
-
-	glfwSetCursorPosCallback(window, mouseMoveCallback);
-	glfwSetWindowSizeCallback(window, resizeCallback);
-	glfwSetKeyCallback(window, keyboardCallback);
-	
-
-	Camera camera;
-
-	ShaderProgram shader;
+	//Shader init
+	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
 	shader.loadShaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 
-	ShaderProgram guiShader;
-	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
-
-	
-
-	Entity planet = Entity("res/planetScheme.obj", "res/images/planet.png", false, shader, 355);
 
 
 	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
+	Gui play = Gui("res/images/gui/play.png", guiShader);
 
-	Gui center = Gui("res/images/bg.jpg", guiShader);
 	
-	testSound.play();
+
 	
+	//loadEntities();
+
+	
+	int currentId = 0;
+	int lastId = 0;
+
+	int position = 0;
+
+	Mesh planet;
+	planet.loadOBJ("res/planetScheme.obj");
+
+	Texture2D texture;
+	texture.loadTexture("res/images/planet.png");
+
+	Planet moon = Planet(planet, texture, shader, 36);
+	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
+	moon.setID(12);
+	moon.setName("Kiscica 14");
+	moon.setOrbitalCenter(glm::vec3(10, 5, 0));
+	moon.setOrbitalRotationSpeed(40);
+	moon.setRotationSpeed(720);
+
+	for (int i = 0; i < 1; i++) {
+		planets.push_back(moon);
+
+	}
+
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		display.getFrames();
+		display.setDeltaTime();
 		glfwPollEvents();
 		randomGui.setDisplay(width, height, window);
 		exitGui.setDisplay(width, height, window);
-		center.setDisplay(width, height, window);
+		play.setDisplay(width, height, window);
 
 
 
 		//Camera movement
-		vec3 targetPosition(0.0f, 0.0f, 0.0f);
+
 		camera.setLookAt(targetPosition);
 		camera.rotate(cameraYaw, cameraPitch);
 		camera.setRadius(cameraRadius);
@@ -139,37 +219,51 @@ int main() {
 		double posX, posY;
 		glfwGetCursorPos(window, &posX, &posY);
 
-
-		center.setDisplay(width, height, window);
-		center.scaleInPixels(600, 600);
+		play.scaleInPixels(1000, 400);
 		exitGui.positionInPixels(width / 2 - 300, height / 2 - 300);
 
-		
-
-
-		shader.use();
-		
-		//GUI actions
-		if (exitGui.onClick()) {
-			std::cout << "Exit call sent" << std::endl;
-			glfwSetWindowShouldClose(window, GL_TRUE);
-		} else if (randomGui.onClick()) {
-			if (gameState == inGame) {
-				gameState = inMenu;
-			}
-			else {
-				gameState = inGame;
-			}
-		};
 
 		//game state in game
 		if (gameState == inGame) {
-			
-			//object picking
-			planet.setRotation(0, 0, 0);
-			planet.pickingRender();
 
-			if (display.mouseLeftPressed()) {
+			for (int k = 0; k < planets.size(); k++) {
+				Planet planet = planets[k];
+				planet.rotate(display.getDeltaTime());
+				planet.orbit(display.getDeltaTime());
+
+				planets[k] = planet;
+			};
+
+
+			//object picking
+			if (loadReady) {
+				for (Planet planet: planets) {
+					planet.setPosition(glm::vec3(position, 0, 0));
+
+					//std::cout << planet.getPosition().x << std::endl;
+					planet.pickingRender();
+				}
+
+				for (Entity planeta : entites) {
+					planeta.pickingRender();
+				}
+			}
+			
+
+			
+
+			
+			//std::cout << position << std::endl;
+
+			display.getEntityId(currentId);
+			if (currentId != lastId) {
+				std::cout << currentId << std::endl;
+				lastId = currentId;
+			}
+
+			//std::cout << id << std::endl;
+
+			/*if (display.mouseLeftPressed()) {
 				glFlush();
 				glFinish();
 
@@ -183,20 +277,41 @@ int main() {
 					data[2] * 256 * 256;
 
 				std::cout << pickedID << std::endl;
-			}
+			}*/
+			
+
 
 			
 			//object rendering
 			if (!boundingBoxes) {
 				display.initDisplay();
-				planet.render();
+
+				//shader.use();
+
+				
+				
+				if (!loadReady) {
+
+					for (Planet planet : planets) {
+						planet.render();
+					}
+					for (Entity planeta : entites) {
+						planeta.getCamera(camera);
+						planeta.render();
+					}
+				}
+				
 			}
+			
+
 		}	
+
+		
 
 
 
 		//GUI
-		randomGui.setDisplay(width, height, window);
+		/*randomGui.setDisplay(width, height, window);
 		randomGui.scaleInPixels(600, 400);
 		randomGui.positionInPixels(10, 10);
 
@@ -204,18 +319,55 @@ int main() {
 		exitGui.scaleInPixels(60, 60);
 		exitGui.positionInPixels(width - 70, 10);
 
-		center.render();
 
-
-		randomGui.render();
-		exitGui.render();
+		//GUI actions
+		if (exitGui.onClick()) {
+			if (bgMusic.isPlaying()) {
+				bgMusic.pause();
+			}
+			else {
+				bgMusic.resume();
+			}
+		}*/
+		
 
 		
 
+		/*if (gameState == inGame) {
+			if (randomGui.onClick()) {
+				if (gameState == inGame) {
+					gameState = inMainMenu;
+				}
+				else {
+					if (!loadReady)
+						loadEntities();
+					gameState = inGame;
+				}
+			}
+			randomGui.render();
+			exitGui.render();
+		}
+		else if(gameState == inMainMenu) {
+			play.render();
+			if (play.onClick()) {
+				std::cout << "starting" << std::endl;
+				if (!loadReady)
+					loadEntities();
+				gameState = inGame;
+			}
+		}*/
+		
+		
+		
+
 		//Display updater
-		shader.use();
+		//shader.use();
 		display.update();
+		//glfwSwapBuffers(window);
 	}
+
+	for (Entity entity : entites) entity.getMesh().cleanUp();
+
 	shader.cleanUp();
 	guiShader.cleanUp();
 	glfwTerminate();
@@ -226,11 +378,12 @@ int main() {
 
 void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int mode) {
 
-	if (gameState == inMenu) {
+	if (gameState == inMainMenu) {
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(window, GL_TRUE);
 		if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) gameState = inGame;
+		loadEntities();
 	} else if (gameState == inGame) {
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) gameState = inMenu;
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) gameState = inMainMenu;
 	}
 
 	
@@ -254,17 +407,46 @@ void mouseMoveCallback(GLFWwindow* window, double posX, double posY) {
 		const float mouseSensitivity = 0.25f;
 
 		static vec2 lastMousePos = vec2(0, 0);
+		static vec2 lastPositionPress = vec2(0, 0);
+		static bool travel = false;
+
 		//UpdateAngles
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == 1) {
 			cameraYaw -= ((float)posX - lastMousePos.x) * (float)mouseSensitivity;
 			cameraPitch += ((float)posY - lastMousePos.y) * (float)mouseSensitivity;
 		}
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == 1) {
-			cameraRadius -= ((float)posY - lastMousePos.y) * (float)mouseSensitivity;
-			cameraRadius = glm::clamp(cameraRadius, 10.0f, 250.0f);
+			if (!travel) {
+				lastPositionPress = vec2(posX, posY);
+				travel = true;
+			}
+			else {
+
+				float speedX = ((float)posX - lastPositionPress.x);
+				float speedY = ((float)posY - lastPositionPress.y);
+
+				float mouseDeltaY = ((float)posY - lastMousePos.y);
+				float mouseDeltaX = ((float)posX - lastMousePos.x);
+				float dz = speedX * cosf(radians(cameraYaw)) * mouseSensitivity / 10;
+				float dx = speedY * sinf(radians(cameraYaw)) * mouseSensitivity / 10;
+				targetPosition.z -= dz;
+				targetPosition.x -= dx;
+
+				//std::cout << speedX << "-" << cameraYaw << std::endl;
+			}
+		}
+		else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == 0) {
+			if (travel) travel = false;
 		}
 		lastMousePos = vec2(posX, posY);
 	}
+
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+	//std::cout << xoffset << " - " << yoffset << std::endl;
+	cameraRadius -= yoffset * 5;
+	cameraRadius = glm::clamp(cameraRadius, 10.0f, 250.0f);
 
 }
 

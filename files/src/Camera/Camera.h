@@ -16,12 +16,14 @@ public:
 	void setLookAt(const vec3& target);
 	void setRadius(float radius);
 
+	glm::vec3 getCamPos();
+
 
 private:
 	
 	GLFWwindow* window;
 
-	vec3 cameraPosition;
+	glm::vec3 cameraPosition;
 	vec3 cameraTargetPos;
 	vec3 cameraUp;
 
@@ -30,6 +32,8 @@ private:
 
 	//angles [RADIANS]
 	float cameraYaw, cameraPitch;
+
+	glm::vec3 targetPosition = glm::vec3(0, 0, 0);
 };
 
 #endif // !CAMERA_H

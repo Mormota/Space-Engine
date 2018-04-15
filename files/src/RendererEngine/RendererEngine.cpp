@@ -2,13 +2,26 @@
 
 
 
-RendererEngine::RendererEngine(ShaderProgram Loadedshader, glm::mat4 projectionMatrix){
+RendererEngine::RendererEngine(ShaderProgram Loadedshader){
 	shader = Loadedshader;
-	shader.setUniform("projection", projectionMatrix);
+	//shader.setUniform("projection", projectionMatrix);
 }
 
 
+void RendererEngine::render(Entity entity) {
+	glm::mat4 modelMatrix;
+	modelMatrix = glm::translate(glm::mat4(), entity.getPosition()) *
+		glm::scale(glm::mat4(), glm::vec3(1.0f, 1.0f, 1.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(entity.getRotation().x), glm::vec3(1.0f, 0.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(entity.getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(entity.getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
 
+	shader.setUniform("model", modelMatrix);
+
+	entity.getTexture().bind(0);
+	entity.getMesh().draw();
+	entity.getTexture().unBind();
+}
 
 
 

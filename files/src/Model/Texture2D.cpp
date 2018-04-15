@@ -63,3 +63,7 @@ void Texture2D::unBind(GLuint texUnit) {
 	glActiveTexture(GL_TEXTURE0 + texUnit);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+GLuint Texture2D::getID() {
+	return textureID;
+}

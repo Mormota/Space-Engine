@@ -13,11 +13,12 @@
 
 #include "SoundSystem.h"
 
+SoundSystem::SoundSystem(){}
 
-SoundSystem::SoundSystem(const char* file) {
+void SoundSystem::loadSound(const char* file) {
 	data = loadWAV(file, channel, sampleRate, bps, size);
 
-	
+
 
 
 	alGenBuffers(1, &bufferid);
@@ -43,15 +44,95 @@ SoundSystem::SoundSystem(const char* file) {
 	alBufferData(bufferid, format, data, size, sampleRate);
 
 	alGenSources(1, &sourceid);
+
+
 	alSourcei(sourceid, AL_BUFFER, bufferid);
 
 	alSourcei(sourceid, AL_LOOPING, 1);
 
+	ALfloat listenerOri[] = { 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f };
+
+	alListener3f(AL_POSITION, position.x, position.y, position.z);
+
+	alSourcef(sourceid, AL_GAIN, volume);
+	alSourcef(sourceid, AL_PITCH, pitch);
+
+
+	alListener3f(AL_VELOCITY, 0, 0, 0);
+
+
+	alListenerfv(AL_ORIENTATION, listenerOri);
+
+
+
 	
+
+
 }
 
-void SoundSystem::play() {
+void SoundSystem::setDistanceGain() {
+
+}
+
+SoundSystem::SoundSystem(const char* file) {
+	loadSound(file);
+}
+
+SoundSystem::~SoundSystem() {
+	//cleanUp();
+}
+
+void SoundSystem::pause() {
+	alSourcePause(sourceid);
+}
+
+void SoundSystem::resume() {
 	alSourcePlay(sourceid);
+}
+
+void SoundSystem::stop() {
+	alSourceStop(sourceid);
+}
+
+
+void SoundSystem::play() {
+	stop();
+	//alSourcePlay(sourceid);
+	resume();
+}
+
+void SoundSystem::setVelocity(glm::vec3 velocity) {
+	alListener3f(AL_VELOCITY, velocity.x, velocity.y, velocity.z);
+}
+
+void SoundSystem::setLooping(bool value) {
+	alSourcei(sourceid, AL_LOOPING, value ? 1 : 0);
+}
+
+bool SoundSystem::isPlaying() {
+	ALenum state;
+	alGetSourcei(sourceid, AL_SOURCE_STATE, &state);
+	return (state == AL_PLAYING);
+}
+
+void SoundSystem::setListenerOri() {
+
+}
+
+void SoundSystem::setListenerPos(glm::vec3 pos) {
+	position = pos;
+	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+}
+
+void SoundSystem::setSoundPos(glm::vec3 pos) {
+	alSource3f(sourceid, AL_POSITION, pos.x, pos.y, pos.z);
+}
+
+void SoundSystem::setVolume(float volume) {
+	alSourcef(sourceid, AL_GAIN, volume);
+}
+void SoundSystem::setPitch(float pitch) {
+	alSourcef(sourceid, AL_PITCH, pitch);
 }
 
 char* SoundSystem::loadWAV(const char* fn, int& chan, int& samplerate, int& bps, int& size){
@@ -97,4 +178,9 @@ int SoundSystem::convertToInt(char* buffer, int len){
 		for (int i = 0; i<len; i++)
 			((char*)&a)[3 - i] = buffer[i];
 	return a;
+}
+
+void SoundSystem::cleanUp() {
+	alDeleteSources(1, &sourceid);
+	alDeleteBuffers(1, &bufferid);
 }

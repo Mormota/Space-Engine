@@ -1,6 +1,7 @@
 #include "../ShaderProgram/ShaderProgram.h"
 #include <iostream>
 #include "glm\glm.hpp"
+#include "../Entity/Entity.h"
 
 
 #ifndef RENDERERENGINE_H
@@ -9,7 +10,9 @@
 
 class RendererEngine {
 public:
-	RendererEngine(ShaderProgram Loadedshader, glm::mat4 projectionMatrix);
+	RendererEngine(ShaderProgram Loadedshader);
+
+	void render(Entity entity);
 
 
 private:

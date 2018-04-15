@@ -21,7 +21,7 @@ void main(){
 	UV = inUV;
 
 	vec4 relative = vec4(pos, 1.0);
-	gl_Position = projection * view * model * relative;
+	gl_Position = projection * view * model * vec4(pos, 1.0);
 
 	surfaceNormal = (model * vec4(normals, 0.0)).xyz;
 	toLightVector = normalize(lightPos - (model * relative).xyz);

@@ -25,8 +25,8 @@ std::vector<std::string> split(std::string s, std::string t)
 Mesh::Mesh():isLoaded(false){}
 
 Mesh::~Mesh(){
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	//glDeleteVertexArrays(1, &VAO);
+	//glDeleteBuffers(1, &VBO);
 }
 
 
@@ -183,6 +183,11 @@ void Mesh::draw(){
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Vertices.size());
 	glBindVertexArray(0);
+}
+
+void Mesh::cleanUp() {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 }
 
 

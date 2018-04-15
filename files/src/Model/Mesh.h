@@ -23,8 +23,8 @@ public:
 	~Mesh();
 
 	bool loadOBJ(const std::string& fileName);
-	void guiLoader();
 	void draw();
+	void cleanUp();
 
 private:
 	void initBuffers();
