@@ -16,7 +16,7 @@ void Planet::orbit(double deltaTime) {
 	float posZ = (sinf(radians((float)orbitRotation)) * distanceFromCenter) + orbitCenter.z;
 	float posX = (cosf(radians((float)orbitRotation)) * distanceFromCenter) + orbitCenter.z;
 
-	float oval = sinf(radians(orbitRotation));
+	float oval = sinf(radians(orbitRotation / 2));
 
 	orbitRotation = orbitRotation + (orbitalSpeed * (float)deltaTime);
 
@@ -65,4 +65,8 @@ void Planet::setOrbitalRotationSpeed(float orbitalRotationSpeed) {
 }
 void Planet::setDistortion(float distortion) {
 	this->distortion = distortion;
+}
+
+string Planet::getName() {
+	return name;
 }

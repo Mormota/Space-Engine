@@ -187,12 +187,19 @@ int main() {
 	moon.setName("Kiscica 14");
 	moon.setOrbitalCenter(glm::vec3(10, 5, 0));
 	moon.setOrbitalRotationSpeed(40);
-	moon.setRotationSpeed(720);
+	moon.setRotationSpeed(25);
+	moon.setDistortion(12);
 
-	for (int i = 0; i < 1; i++) {
-		planets.push_back(moon);
+	planets.push_back(moon);
 
-	}
+	moon.setName("Almacsutka 12");
+	moon.setOrbitalCenter(glm::vec3(10, 5, 0));
+	moon.setDistanceFromCenter(0);
+	moon.setOrbitalRotationSpeed(25);
+	moon.setRotationSpeed(5);
+	moon.setID(16);
+	moon.setDistortion(0);
+	planets.push_back(moon);
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -236,17 +243,8 @@ int main() {
 
 
 			//object picking
-			if (loadReady) {
-				for (Planet planet: planets) {
-					planet.setPosition(glm::vec3(position, 0, 0));
-
-					//std::cout << planet.getPosition().x << std::endl;
-					planet.pickingRender();
-				}
-
-				for (Entity planeta : entites) {
-					planeta.pickingRender();
-				}
+			for (Planet planet: planets) {
+				planet.pickingRender();
 			}
 			
 
@@ -255,15 +253,18 @@ int main() {
 			
 			//std::cout << position << std::endl;
 
-			display.getEntityId(currentId);
+			/*display.getEntityId(currentId);
 			if (currentId != lastId) {
 				std::cout << currentId << std::endl;
+				for (Planet planet : planets) {
+					if ((int)planet.getID() == (int)currentId)
+						std::cout << planet.getName() << std::endl;
+				}
 				lastId = currentId;
-			}
+			}*/
 
-			//std::cout << id << std::endl;
 
-			/*if (display.mouseLeftPressed()) {
+			if (display.mouseLeftPressed()) {
 				glFlush();
 				glFinish();
 
@@ -276,29 +277,28 @@ int main() {
 					data[1] * 256 +
 					data[2] * 256 * 256;
 
-				std::cout << pickedID << std::endl;
-			}*/
+				for (Planet planet : planets) {
+					if ((int)planet.getID() == (int)pickedID)
+						std::cout << planet.getName() << std::endl;
+				}
+			}
 			
 
 
-			
 			//object rendering
 			if (!boundingBoxes) {
 				display.initDisplay();
-
-				//shader.use();
+				shader.use();
 
 				
 				
-				if (!loadReady) {
 
-					for (Planet planet : planets) {
-						planet.render();
-					}
-					for (Entity planeta : entites) {
-						planeta.getCamera(camera);
-						planeta.render();
-					}
+				for (Planet planet : planets) {
+					planet.render();
+				}
+				for (Entity planeta : entites) {
+					planeta.getCamera(camera);
+					planeta.render();
 				}
 				
 			}
@@ -311,7 +311,7 @@ int main() {
 
 
 		//GUI
-		/*randomGui.setDisplay(width, height, window);
+		randomGui.setDisplay(width, height, window);
 		randomGui.scaleInPixels(600, 400);
 		randomGui.positionInPixels(10, 10);
 
@@ -328,13 +328,13 @@ int main() {
 			else {
 				bgMusic.resume();
 			}
-		}*/
+		}
 		
 
 		
 
-		/*if (gameState == inGame) {
-			if (randomGui.onClick()) {
+		if (gameState == inGame) {
+			/*if (randomGui.onClick()) {
 				if (gameState == inGame) {
 					gameState = inMainMenu;
 				}
@@ -343,27 +343,26 @@ int main() {
 						loadEntities();
 					gameState = inGame;
 				}
-			}
+			}*/
 			randomGui.render();
 			exitGui.render();
 		}
 		else if(gameState == inMainMenu) {
 			play.render();
-			if (play.onClick()) {
+			/*if (play.onClick()) {
 				std::cout << "starting" << std::endl;
 				if (!loadReady)
 					loadEntities();
 				gameState = inGame;
-			}
-		}*/
+			}*/
+		}
 		
 		
 		
 
 		//Display updater
-		//shader.use();
+		shader.use();
 		display.update();
-		//glfwSwapBuffers(window);
 	}
 
 	for (Entity entity : entites) entity.getMesh().cleanUp();

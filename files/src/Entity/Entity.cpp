@@ -59,7 +59,7 @@ void Entity::setRotation(float rotX, float rotY, float rotZ) {
 }
 
 void Entity::setID(int id) {
-	id = id;
+	this->id = id;
 	r = (id & 0x000000FF) >> 0;
 	g = (id & 0x0000FF00) >> 8;
 	b = (id & 0x00FF0000) >> 16;
@@ -80,8 +80,8 @@ void Entity::render() {
 	
 	shader.setUniform("model", modelMatrix);
 
-	//shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
-	//shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
+	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
+	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
 
 	texture.bind(0);
 	mesh.draw();

@@ -43,6 +43,9 @@ public:
 	void setOrbitalRotationSpeed(float orbitalRotationSpeed);
 	void setDistortion(float distortion);
 
+	string getName();
+	
+
 private:
 	string name = "Unnamed";
 	float rotation = 0;
