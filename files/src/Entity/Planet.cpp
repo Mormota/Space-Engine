@@ -1,8 +1,8 @@
 #include "Planet.h"
 #include "Entity.h"
 
-Planet::Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id) :Entity(model, texture, shader, id) {
-
+Planet::Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id, vector<Planet> subOrbits) :Entity(model, texture, shader, id) {
+	this->subOrbits = subOrbits;
 }
 
 void Planet::rotate(double deltaTime) {
@@ -14,13 +14,33 @@ void Planet::rotate(double deltaTime) {
 void Planet::orbit(double deltaTime) {
 	float posY = orbitCenter.y;
 	float posZ = (sinf(radians((float)orbitRotation)) * distanceFromCenter) + orbitCenter.z;
-	float posX = (cosf(radians((float)orbitRotation)) * distanceFromCenter) + orbitCenter.z;
+	float posX = (cosf(radians((float)orbitRotation)) * distanceFromCenter) + orbitCenter.x;
 
-	float oval = sinf(radians(orbitRotation / 2));
+	float ovalZ = sinf(radians(orbitRotation + distortionAngle));
+	float ovalX = sin(radians(orbitRotation + distortionAngle));
 
-	orbitRotation = orbitRotation + (orbitalSpeed * (float)deltaTime);
+	orbitRotation = orbitRotation + (orbitalSpeed * deltaTime);
 
-	this->setPosition(glm::vec3(posX, posY, posZ + oval * distortion));
+	this->setPosition(glm::vec3(posX + ovalX * distortion, posY, posZ + ovalZ * distortion));
+	glm::vec3 currentPos = this->getPosition();
+
+	for (int k = 0; k < subOrbits.size(); k++) {
+		Planet orbit = subOrbits[k];
+		orbit.setOrbitalCenter(currentPos);
+		orbit.rotate(deltaTime);
+		orbit.orbit(deltaTime);
+
+		subOrbits[k] = orbit;
+	};
+
+}
+
+void Planet::addSubOrbit(Planet orbit) {
+	subOrbits.push_back(orbit);
+}
+
+void Planet::setDistortionAngle(float angle) {
+	distortionAngle = angle;
 }
 
 void Planet::setPlanetAttributes(
@@ -69,4 +89,18 @@ void Planet::setDistortion(float distortion) {
 
 string Planet::getName() {
 	return name;
+}
+
+void Planet::planetRender() {
+	this->render();
+	for (Planet subOrbit : subOrbits) {
+		subOrbit.render();
+	}
+}
+
+void Planet::planetPickingRender() {
+	this->pickingRender();
+	for (Planet subOrbit : subOrbits) {
+		subOrbit.pickingRender();
+	}
 }

@@ -38,6 +38,7 @@ public:
 	void setPosition(glm::vec3 newPosition);
 	void setRotation(float rotX, float rotY, float rotZ);
 	void setID(int ID);
+	void setScale(float scale);
 	int getID();
 
 	Mesh getMesh();

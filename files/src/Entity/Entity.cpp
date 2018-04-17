@@ -36,6 +36,10 @@ Entity::Entity(Mesh model, Texture2D texture, ShaderProgram shaderProgram, int i
 	rotZ = 0;
 }
 
+void Entity::setScale(float scale) {
+	Scale = glm::vec3(scale, scale, scale);
+}
+
 void Entity::setPickingShader(ShaderProgram pickingShader) {
 	this->pickingShader = pickingShader;
 }

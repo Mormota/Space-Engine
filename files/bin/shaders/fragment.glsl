@@ -13,7 +13,7 @@ uniform vec2 pickingVector;
 
 out vec4 colorOut;
 void main(){
-	float lightLevel = dot(surfaceNormal, toLightVector);
+	float lightLevel = dot(normalize(surfaceNormal), normalize(toLightVector));
 
 	float brightness = max(lightLevel, 0.2);
 	if(pickingVector.x != 1.0f){

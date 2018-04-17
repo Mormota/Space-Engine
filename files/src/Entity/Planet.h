@@ -14,16 +14,20 @@
 #define PLANET_H
 
 #include <string>
+#include <vector>
 
 class Planet : public Entity{
 public:
-	Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id);
+	Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id, vector<Planet> subOrbits = vector<Planet>());
 
 	//movement
 	void rotate(double deltaTime);
 	void orbit(double deltaTime);
 
+
+
 	//setters
+	void addSubOrbit(Planet orbit);
 	void setPlanetAttributes(
 		const string name, 
 		float planetRotation, 
@@ -42,7 +46,10 @@ public:
 	void setRotationSpeed(float rotationSpeed);
 	void setOrbitalRotationSpeed(float orbitalRotationSpeed);
 	void setDistortion(float distortion);
+	void setDistortionAngle(float angle);
 
+	void planetRender();
+	void planetPickingRender();
 	string getName();
 	
 
@@ -57,6 +64,9 @@ private:
 	int orbitalSpeed = 36;
 
 	float distortion = 0;
+	float distortionAngle = 0;
+
+	vector<Planet> subOrbits;
 
 
 };

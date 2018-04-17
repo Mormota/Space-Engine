@@ -181,25 +181,56 @@ int main() {
 	Texture2D texture;
 	texture.loadTexture("res/images/planet.png");
 
+
+	Planet station = Planet(planet, texture, shader, 36);
+	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
+	station.setID(13);
+	station.setDistanceFromCenter(6);
+	station.setName("egyes típusú ûrbázis");
+	station.setOrbitalRotationSpeed(-15);
+	station.setRotationSpeed(-25);
+	station.setDistortion(2);
+	station.setDistortionAngle(45);
+	station.setScale(0.5);
+
+	Planet station2 = Planet(planet, texture, shader, 36);
+	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
+	station2.setID(14);
+	station2.setDistanceFromCenter(4);
+	station2.setName("egyes típusú ûrbázis");
+	station2.setOrbitalRotationSpeed(-20);
+	station2.setRotationSpeed(-25);
+	station2.setDistortion(0);
+	station2.setDistortionAngle(45);
+	station2.setScale(0.5);
+
+
+	//station.addSubOrbit(station2);
+
 	Planet moon = Planet(planet, texture, shader, 36);
 	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
-	moon.setID(12);
-	moon.setName("Kiscica 14");
-	moon.setOrbitalCenter(glm::vec3(10, 5, 0));
-	moon.setOrbitalRotationSpeed(40);
-	moon.setRotationSpeed(25);
-	moon.setDistortion(12);
-
-	planets.push_back(moon);
 
 	moon.setName("Almacsutka 12");
-	moon.setOrbitalCenter(glm::vec3(10, 5, 0));
+	moon.setOrbitalCenter(glm::vec3(0, 0, 0));
 	moon.setDistanceFromCenter(0);
 	moon.setOrbitalRotationSpeed(25);
 	moon.setRotationSpeed(5);
 	moon.setID(16);
 	moon.setDistortion(0);
 	planets.push_back(moon);
+
+	moon.setID(12);
+	moon.setName("Kiscica 14");
+	moon.setOrbitalRotationSpeed(0);
+	moon.setRotationSpeed(25);
+	moon.setDistortion(0);
+	moon.setDistanceFromCenter(25);
+
+	moon.addSubOrbit(station);
+
+	planets.push_back(moon);
+
+	
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -244,7 +275,7 @@ int main() {
 
 			//object picking
 			for (Planet planet: planets) {
-				planet.pickingRender();
+				planet.planetPickingRender();
 			}
 			
 
@@ -294,7 +325,7 @@ int main() {
 				
 
 				for (Planet planet : planets) {
-					planet.render();
+					planet.planetRender();
 				}
 				for (Entity planeta : entites) {
 					planeta.getCamera(camera);
