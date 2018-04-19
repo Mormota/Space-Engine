@@ -9,6 +9,12 @@ void Planet::rotate(double deltaTime) {
 	int rotY = this->getRotation().y + 0.1f;
 	rotation += rotationSpeed * deltaTime;
 	this->setRotation(0, rotation, 0);
+
+	for (int k = 0; k < subOrbits.size(); k++) {
+		Planet orbit = subOrbits[k];
+		orbit.rotate(deltaTime);
+		subOrbits[k] = orbit;
+	};
 }
 
 void Planet::orbit(double deltaTime) {
@@ -21,18 +27,30 @@ void Planet::orbit(double deltaTime) {
 
 	orbitRotation = orbitRotation + (orbitalSpeed * deltaTime);
 
-	this->setPosition(glm::vec3(posX + ovalX * distortion, posY, posZ + ovalZ * distortion));
+	float circulateOffset = sinf(radians(orbitAngle)) * sinf(radians(orbitRotation)) * distanceFromCenter;
+
+	this->setPosition(glm::vec3(posX + offset.x + ovalX * distortion, posY + offset.y + circulateOffset, posZ + offset.z + ovalZ * distortion));
 	glm::vec3 currentPos = this->getPosition();
 
 	for (int k = 0; k < subOrbits.size(); k++) {
 		Planet orbit = subOrbits[k];
 		orbit.setOrbitalCenter(currentPos);
-		orbit.rotate(deltaTime);
 		orbit.orbit(deltaTime);
-
 		subOrbits[k] = orbit;
 	};
 
+}
+
+void Planet::setType(planetType type) {
+	if (type == EARTH_PLANET) {
+		this->setScale(1);
+	}
+	else if (type == MOON) {
+		this->setScale(0.15);
+	}
+	else if (type == SUN) {
+		this->setScale(4.5);
+	}
 }
 
 void Planet::addSubOrbit(Planet orbit) {
@@ -87,6 +105,23 @@ void Planet::setDistortion(float distortion) {
 	this->distortion = distortion;
 }
 
+void Planet::setOffset(glm::vec3 offset) {
+	this->offset = offset;
+}
+
+void Planet::setOffsetX(float offset) {
+	this->offset.x = offset;
+}
+
+void Planet::setOffsetY(float offset) {
+	this->offset.y = offset;
+}
+
+void Planet::setOffsetZ(float offset) {
+	this->offset.z = offset;
+}
+
+
 string Planet::getName() {
 	return name;
 }
@@ -103,4 +138,8 @@ void Planet::planetPickingRender() {
 	for (Planet subOrbit : subOrbits) {
 		subOrbit.pickingRender();
 	}
+}
+
+void Planet::setCirculateAngle(float angle) {
+	orbitAngle = angle;
 }

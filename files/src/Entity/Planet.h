@@ -9,12 +9,48 @@
 #include "../Model/Texture2D.h"
 #include "../ShaderProgram/ShaderProgram.h"
 #include "Entity.h"
+#include "../Content/Resource.h"
 
 #ifndef PLANET_H
 #define PLANET_H
 
 #include <string>
 #include <vector>
+
+
+enum planetType {
+	CARBON_PLANET,
+	CIRCUMBINARI_PLANET,
+	CITY_PLANET,
+	CORELESS_PLANET,
+	DESERT_PLANET,
+	DWARF_PLANET,
+	EARTH_PLANET,
+	EXO_PLANET,
+	EYEBALL_PLANET,
+	GAS_PLANET,
+	HELIUM_PLANET,
+	HOT_JUPITER,
+	HOT_NEPTUNE,
+	ICE_GIANT,
+	ICE_PLANET,
+	INNER_PLANET,
+	LAVA_PLANET,
+	MEGA_EARTH_PLANET,
+	MESO_PLANET,
+	MINOR_PLANET,
+	OCEAN_PLANET,
+	PLUTOID_PLANET,
+	ROGUE_PLANET,
+	TERRESTIAL_PLANET,
+	TROJAN_PLANET,
+
+
+	MOON,
+	SUN,
+	STATION
+};
+
 
 class Planet : public Entity{
 public:
@@ -48,6 +84,16 @@ public:
 	void setDistortion(float distortion);
 	void setDistortionAngle(float angle);
 
+	void setOrbitAngle(float angle);
+	void setCirculateAngle(float angle);
+
+	void setOffset(glm::vec3 offset);
+	void setOffsetX(float offset);
+	void setOffsetY(float offset);
+	void setOffsetZ(float offset);
+
+	void setType(planetType type);
+
 	void planetRender();
 	void planetPickingRender();
 	string getName();
@@ -57,6 +103,8 @@ private:
 	string name = "Unnamed";
 	float rotation = 0;
 	float orbitRotation = 0;
+	float angle = 0;
+	float orbitAngle = 0;
 	glm::vec3 orbitCenter = glm::vec3(0, 0, 0);
 	float distanceFromCenter = 25;
 
@@ -66,7 +114,12 @@ private:
 	float distortion = 0;
 	float distortionAngle = 0;
 
+	glm::vec3 offset = glm::vec3(0, 0, 0);
+
 	vector<Planet> subOrbits;
+	std::vector<Resource> resources;
+
+	planetType type = EARTH_PLANET;
 
 
 };

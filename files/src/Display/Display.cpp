@@ -124,7 +124,7 @@ void Display::update() {
 }
 
 void Display::initDisplay() {
-	glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
+	glClearColor(0.02, 0.02f, 0.02f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void Display::useShader(ShaderProgram shader, Camera camera) {

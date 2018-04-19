@@ -10,6 +10,7 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <ctime>
 
 
 #include "GL/glew.h"
@@ -30,6 +31,7 @@
 #include "gui\Text.h"
 #include "RendererEngine\RendererEngine.h"
 #include "Entity\Planet.h"
+#include "Content\Resource.h"
 
 #define APIENTRY    WINAPI
 using namespace glm;
@@ -72,7 +74,6 @@ void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 //AudioFile<double> audioFile;
-
 
 
 ALCdevice* device;
@@ -131,6 +132,9 @@ void loadEntities() {
 
 
 int main() {
+
+	std::srand(std::time(nullptr));
+
 	Display display = Display(width, height, "Space Engine");
 	window = display.initOpenGl();
 	if (window == NULL) return -1;
@@ -164,16 +168,15 @@ int main() {
 	Gui exitGui = Gui("res/images/exit.png", guiShader);
 	Gui play = Gui("res/images/gui/play.png", guiShader);
 
+	Resource apple;
+	apple.setName("Apple");
+	apple.setPrices(100, 125, 140);
 	
 
 	
 	//loadEntities();
 
 	
-	int currentId = 0;
-	int lastId = 0;
-
-	int position = 0;
 
 	Mesh planet;
 	planet.loadOBJ("res/planetScheme.obj");
@@ -187,23 +190,21 @@ int main() {
 	station.setID(13);
 	station.setDistanceFromCenter(6);
 	station.setName("egyes típusú ûrbázis");
-	station.setOrbitalRotationSpeed(-15);
-	station.setRotationSpeed(-25);
-	station.setDistortion(2);
-	station.setDistortionAngle(45);
-	station.setScale(0.5);
+	station.setOrbitalRotationSpeed(-20);
+	station.setRotationSpeed(-60);
+	station.setType(MOON);
+	station.setCirculateAngle(5);
+	station.setOrbitalRotation(0);
 
 	Planet station2 = Planet(planet, texture, shader, 36);
 	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
 	station2.setID(14);
-	station2.setDistanceFromCenter(4);
+	station2.setDistanceFromCenter(3);
 	station2.setName("egyes típusú ûrbázis");
-	station2.setOrbitalRotationSpeed(-20);
+	station2.setOrbitalRotationSpeed(-25);
 	station2.setRotationSpeed(-25);
-	station2.setDistortion(0);
-	station2.setDistortionAngle(45);
 	station2.setScale(0.5);
-
+	station2.setType(MOON);
 
 	//station.addSubOrbit(station2);
 
@@ -213,35 +214,25 @@ int main() {
 	moon.setName("Almacsutka 12");
 	moon.setOrbitalCenter(glm::vec3(0, 0, 0));
 	moon.setDistanceFromCenter(0);
-	moon.setOrbitalRotationSpeed(25);
-	moon.setRotationSpeed(5);
+	moon.setPosition(glm::vec3(0, 0, 0));
+	moon.setCirculateAngle(6);
+	moon.setOrbitalRotationSpeed(10);
+	moon.setRotationSpeed(50);
 	moon.setID(16);
 	moon.setDistortion(0);
-	planets.push_back(moon);
-
-	moon.setID(12);
-	moon.setName("Kiscica 14");
-	moon.setOrbitalRotationSpeed(0);
-	moon.setRotationSpeed(25);
-	moon.setDistortion(0);
-	moon.setDistanceFromCenter(25);
-
 	moon.addSubOrbit(station);
-
 	planets.push_back(moon);
 
-	
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
+
 		display.getFrames();
 		display.setDeltaTime();
 		glfwPollEvents();
 		randomGui.setDisplay(width, height, window);
 		exitGui.setDisplay(width, height, window);
 		play.setDisplay(width, height, window);
-
-
 
 		//Camera movement
 
@@ -257,8 +248,6 @@ int main() {
 		double posX, posY;
 		glfwGetCursorPos(window, &posX, &posY);
 
-		play.scaleInPixels(1000, 400);
-		exitGui.positionInPixels(width / 2 - 300, height / 2 - 300);
 
 
 		//game state in game
@@ -281,18 +270,6 @@ int main() {
 
 			
 
-			
-			//std::cout << position << std::endl;
-
-			/*display.getEntityId(currentId);
-			if (currentId != lastId) {
-				std::cout << currentId << std::endl;
-				for (Planet planet : planets) {
-					if ((int)planet.getID() == (int)currentId)
-						std::cout << planet.getName() << std::endl;
-				}
-				lastId = currentId;
-			}*/
 
 
 			if (display.mouseLeftPressed()) {
@@ -444,6 +421,7 @@ void mouseMoveCallback(GLFWwindow* window, double posX, double posY) {
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == 1) {
 			cameraYaw -= ((float)posX - lastMousePos.x) * (float)mouseSensitivity;
 			cameraPitch += ((float)posY - lastMousePos.y) * (float)mouseSensitivity;
+			cameraPitch = glm::clamp(cameraPitch, -90.0f, +90.0f);
 		}
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == 1) {
 			if (!travel) {

@@ -57,16 +57,13 @@
     <Filter Include="Header Files\RendererEngine">
       <UniqueIdentifier>{0a9cf3c1-a2fb-4745-946a-8c775924f933}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Content">
-      <UniqueIdentifier>{cf8a727c-9ce6-4afc-a9df-60a8176f5331}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Content">
-      <UniqueIdentifier>{17c2f05a-b822-4773-8b2e-e708e4cb21ed}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera\Camera.cpp">
       <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Display\Display.cpp">
+      <Filter>Source Files\Display</Filter>
     </ClCompile>
     <ClCompile Include="src\Entity\Entity.cpp">
       <Filter>Source Files\Entity</Filter>
@@ -97,12 +94,6 @@
     </ClCompile>
     <ClCompile Include="src\Entity\Planet.cpp">
       <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Display\Display.cpp">
-      <Filter>Source Files\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Content\Resource.cpp">
-      <Filter>Source Files\Content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +129,6 @@
     </ClInclude>
     <ClInclude Include="src\Entity\Planet.h">
       <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Content\Resource.h">
-      <Filter>Header Files\Content</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

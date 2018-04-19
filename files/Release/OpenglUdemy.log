@@ -1,17 +1,20 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
 C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (OpenglUdemy.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  main.cpp
-c:\users\admin\documents\github\space-engine\files\src\main.cpp(34): warning C4005: 'APIENTRY': macro redefinition
-  c:\users\admin\documents\github\space-engine\files\common\includes\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
-c:\users\admin\documents\github\space-engine\files\src\main.cpp(267): warning C4018: '<': signed/unsigned mismatch
-c:\users\admin\documents\github\space-engine\files\src\main.cpp(304): warning C4244: 'argument': conversion from 'double' to 'GLint', possible loss of data
-c:\users\admin\documents\github\space-engine\files\src\main.cpp(478): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  Planet.cpp
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(10): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(13): warning C4018: '<': signed/unsigned mismatch
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(35): warning C4018: '<': signed/unsigned mismatch
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(49): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(99): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\admin\documents\github\space-engine\files\src\entity\planet.cpp(102): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 1218 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+  67 of 1294 functions ( 5.2%) were compiled, the rest were copied from previous compilation.
+    40 functions were new in current compilation
+    81 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 Text.obj : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
 Text.obj : warning LNK4049: locally defined symbol ___glewGenBuffers imported

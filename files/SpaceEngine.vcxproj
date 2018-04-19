@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera\Camera.cpp" />
-    <ClCompile Include="src\Content\Resource.cpp" />
     <ClCompile Include="src\Display\Display.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\Planet.cpp" />
@@ -35,7 +34,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera\Camera.h" />
-    <ClInclude Include="src\Content\Resource.h" />
     <ClInclude Include="src\Display\Display.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\Planet.h" />
