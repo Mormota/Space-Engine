@@ -96,6 +96,7 @@ public:
 
 	void planetRender();
 	void planetPickingRender();
+	void planetTextureRender();
 	string getName();
 	
 

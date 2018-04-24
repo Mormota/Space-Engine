@@ -109,7 +109,7 @@ void loadEntities() {
 	sound.setLooping(true);
 	//sound.play();
 
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 100; i++) {
 		Entity planeta = Entity(planet, texture, shader, 100);
 		planeta.setPosition(glm::vec3(i * 6 - 6, 0.0f, 0.0f));
 		planeta.setID(25);
@@ -129,7 +129,7 @@ void loadEntities() {
 	loadInProgress = false;
 }
 
-
+double gameSpeed = 0.5;
 
 int main() {
 
@@ -178,51 +178,59 @@ int main() {
 
 	
 
-	Mesh planet;
-	planet.loadOBJ("res/planetScheme.obj");
+	Mesh planetMesh;
+	planetMesh.loadOBJ("res/planetScheme.obj");
+	Mesh moonMesh;
+	moonMesh.loadOBJ("res/moonScheme.obj");
 
 	Texture2D texture;
 	texture.loadTexture("res/images/planet.png");
 
 
-	Planet station = Planet(planet, texture, shader, 36);
-	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
-	station.setID(13);
-	station.setDistanceFromCenter(6);
-	station.setName("egyes típusú ûrbázis");
-	station.setOrbitalRotationSpeed(-20);
-	station.setRotationSpeed(-60);
-	station.setType(MOON);
-	station.setCirculateAngle(5);
-	station.setOrbitalRotation(0);
+	Planet moon = Planet(moonMesh, texture, shader, 36);
+	moon.setID(13);
+	moon.setDistanceFromCenter(6);
+	moon.setName("egyes típusú ûrbázis");
+	moon.setOrbitalRotationSpeed(6);
+	moon.setRotationSpeed(-6);
+	moon.setCirculateAngle(5);
+	moon.setOrbitalRotation(0);
 
-	Planet station2 = Planet(planet, texture, shader, 36);
-	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
-	station2.setID(14);
-	station2.setDistanceFromCenter(3);
-	station2.setName("egyes típusú ûrbázis");
-	station2.setOrbitalRotationSpeed(-25);
-	station2.setRotationSpeed(-25);
-	station2.setScale(0.5);
-	station2.setType(MOON);
 
-	//station.addSubOrbit(station2);
+	Planet earth = Planet(planetMesh, texture, shader, 36);
+	earth.setName("Almacsutka 12");
+	earth.setOrbitalCenter(glm::vec3(0, 0, 0));
+	earth.setDistanceFromCenter(12);
+	earth.setPosition(glm::vec3(0, 0, 0));
+	earth.setCirculateAngle(6);
+	earth.setOrbitalRotationSpeed(10);
+	earth.setRotationSpeed(12);
+	earth.setID(16);
+	earth.setDistortion(0);
+	earth.addSubOrbit(moon);
 
-	Planet moon = Planet(planet, texture, shader, 36);
-	//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
 
-	moon.setName("Almacsutka 12");
-	moon.setOrbitalCenter(glm::vec3(0, 0, 0));
-	moon.setDistanceFromCenter(0);
-	moon.setPosition(glm::vec3(0, 0, 0));
-	moon.setCirculateAngle(6);
-	moon.setOrbitalRotationSpeed(10);
-	moon.setRotationSpeed(50);
-	moon.setID(16);
-	moon.setDistortion(0);
-	moon.addSubOrbit(station);
-	planets.push_back(moon);
+	planets.push_back(earth);
 
+	earth.setDistanceFromCenter(20);
+	earth.setOrbitalRotationSpeed(14);
+	moon.setDistanceFromCenter(4);
+	moon.setOrbitalRotationSpeed(8);
+	//moon.setOrbitAngle(12);
+	moon.setOrbitalRotation(80);
+	earth.addSubOrbit(moon);
+
+	planets.push_back(earth);
+
+	Mesh shipModel;
+	shipModel.loadMatObj("res/containerCarriage.obj");
+
+	Texture2D shipTexture;
+	shipTexture.loadTexture("res/images/c15_base_temp.png");
+
+	Entity testShip = Entity(shipModel, shipTexture, shader);
+	testShip.setPosition(glm::vec3(0, 0, 0 ));
+	testShip.setRotation(20, -20, -20);
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -255,8 +263,8 @@ int main() {
 
 			for (int k = 0; k < planets.size(); k++) {
 				Planet planet = planets[k];
-				planet.rotate(display.getDeltaTime());
-				planet.orbit(display.getDeltaTime());
+				planet.rotate(display.getDeltaTime() * gameSpeed);
+				planet.orbit(display.getDeltaTime() * gameSpeed);
 
 				planets[k] = planet;
 			};
@@ -299,10 +307,10 @@ int main() {
 				shader.use();
 
 				
-				
+				testShip.render();
 
 				for (Planet planet : planets) {
-					planet.planetRender();
+					planet.planetTextureRender();
 				}
 				for (Entity planeta : entites) {
 					planeta.getCamera(camera);

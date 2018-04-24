@@ -133,12 +133,21 @@ void Planet::planetRender() {
 	}
 }
 
+void Planet::planetTextureRender() {
+	this->textureRender();
+	for (Planet subOrbit : subOrbits) {
+		subOrbit.textureRender();
+	}
+}
+
 void Planet::planetPickingRender() {
 	this->pickingRender();
 	for (Planet subOrbit : subOrbits) {
 		subOrbit.pickingRender();
 	}
 }
+
+
 
 void Planet::setCirculateAngle(float angle) {
 	orbitAngle = angle;

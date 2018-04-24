@@ -14,11 +14,7 @@ Entity::Entity(const std::string& Model, const std::string& texturePath, bool ge
 	g = (id & 0x0000FF00) >> 8;
 	b = (id & 0x00FF0000) >> 16;
 
-	Position = glm::vec3(0.0f, 0.0f, 0.0f);
-	Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-	rotY = 0;
-	rotX = 180;
-	rotZ = 0;
+	this->initData();
 }
 
 
@@ -29,10 +25,15 @@ Entity::Entity(Mesh model, Texture2D texture, ShaderProgram shaderProgram, int i
 	this->texture = texture;
 	this->setID(id);
 
+	this->initData();
+	
+}
+
+void Entity::initData() {
 	Position = glm::vec3(0.0f, 0.0f, 0.0f);
 	Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	rotY = 0;
-	rotX = 180;
+	rotX = 0;
 	rotZ = 0;
 }
 
@@ -77,7 +78,7 @@ Entity::~Entity() {}
 
 void Entity::render() {
 	modelMatrix = glm::translate(glm::mat4(), Position) * 
-		glm::scale(glm::mat4(), Scale) *
+		glm::scale(glm::mat4(), Scale * 2.5f) *
 		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -86,6 +87,25 @@ void Entity::render() {
 
 	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
 	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
+	shader.setUniform("materialVector", glm::vec2(1.0f, 0.0f));
+
+	texture.bind(0);
+	mesh.draw();
+	texture.unBind();
+}
+
+void Entity::textureRender() {
+	modelMatrix = glm::translate(glm::mat4(), Position) *
+		glm::scale(glm::mat4(), Scale * 2.5f) *
+		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	shader.setUniform("model", modelMatrix);
+
+	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
+	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
+	shader.setUniform("materialVector", glm::vec2(0.0f, 0.0f));
 
 	texture.bind(0);
 	mesh.draw();
@@ -94,7 +114,7 @@ void Entity::render() {
 
 void Entity::pickingRender() {
 	modelMatrix = glm::translate(glm::mat4(), Position) *
-		glm::scale(glm::mat4(), Scale) *
+		glm::scale(glm::mat4(), Scale - 2.5f) *
 		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));

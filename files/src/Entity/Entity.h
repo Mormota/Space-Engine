@@ -30,6 +30,7 @@ public:
 	
 	void render();
 	void pickingRender();
+	void textureRender();
 
 	glm::vec3 getId();
 
@@ -39,6 +40,7 @@ public:
 	void setRotation(float rotX, float rotY, float rotZ);
 	void setID(int ID);
 	void setScale(float scale);
+	void initData();
 	int getID();
 
 	Mesh getMesh();

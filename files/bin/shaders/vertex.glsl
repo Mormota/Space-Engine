@@ -3,6 +3,7 @@
 layout (location = 0) in vec3 pos;
 layout (location = 1) in vec3 normals;
 layout (location = 2) in vec2 inUV;
+layout (location = 3) in vec3 Color;
 
 
 
@@ -24,6 +25,8 @@ void main(){
 	vec3 lightPos = vec3(250.0f, 25.0f, 25.0f);
 	color = pos;
 	UV = inUV;
+
+	color = Color;
 
 	cameraDirection = vec3(0,0,0) - ( view * model * vec4(pos,1.0)).xyz;
 
