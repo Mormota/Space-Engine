@@ -23,6 +23,7 @@ class Entity{
 public:
 	Entity(const std::string& Model, const std::string& texturePath, bool generateMipMaps, ShaderProgram shader, int id = 1);
 	Entity(Mesh model, Texture2D texture, ShaderProgram shader, int id = 1);
+	Entity(Mesh model, ShaderProgram shaderProgram, int id = 0);
 
 	virtual ~Entity();
 
@@ -55,6 +56,9 @@ public:
 	entityTypes entityType = UNSET;
 
 private:
+
+
+
 	Mesh mesh;
 	Texture2D texture;
 	ShaderProgram shader;

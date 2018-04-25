@@ -34,8 +34,13 @@ public:
 	void draw();
 	void cleanUp();
 
+	bool getLoaded();
+
 private:
+	std::string filename;
 	void initBuffers();
+	void setFilename(std::string filename);
+	void enableAttribs();
 
 	bool isLoaded;
 	bool isMTLloaded;

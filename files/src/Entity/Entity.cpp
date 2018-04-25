@@ -17,6 +17,16 @@ Entity::Entity(const std::string& Model, const std::string& texturePath, bool ge
 	this->initData();
 }
 
+Entity::Entity(Mesh model, ShaderProgram shaderProgram, int id) {
+	mesh = model;
+	shader = shaderProgram;
+
+	this->setID(id);
+
+	this->initData();
+
+}
+
 
 Entity::Entity(Mesh model, Texture2D texture, ShaderProgram shaderProgram, int id) {
 	mesh = model;
@@ -89,9 +99,7 @@ void Entity::render() {
 	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
 	shader.setUniform("materialVector", glm::vec2(1.0f, 0.0f));
 
-	texture.bind(0);
 	mesh.draw();
-	texture.unBind();
 }
 
 void Entity::textureRender() {

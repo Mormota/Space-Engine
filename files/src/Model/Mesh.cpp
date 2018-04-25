@@ -33,8 +33,12 @@ Mesh::~Mesh(){
 }
 
 
+void Mesh::setFilename(std::string file) {
+	this->filename = file;
+}
 
 bool Mesh::loadOBJ(const std::string& filename){
+	setFilename(filename);
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> tempVertices;
 	std::vector<glm::vec2> tempUVs;
@@ -195,6 +199,7 @@ bool Mesh::loadMTL(const std::string& fileName) {
 	return false;
 }
 bool Mesh::loadMatObj(const std::string& fileName) {
+	setFilename(fileName);
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices, materialIndices;
 	std::vector<glm::vec3> tempVertices;
 	std::vector<glm::vec2> tempUVs;
@@ -341,44 +346,61 @@ void Mesh::initBuffers(){
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
+	std::cout << "Initing buffer for: " << filename << " as: " << VAO << "&" << VBO << std::endl;
+
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), &Vertices[0], GL_STATIC_DRAW);
 
 	// Vertex Positions
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
 
 	// Normals attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
 
 	// Vertex Texture Coords
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
 
 	// Vertex Positions
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(8 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(3);
 
 	// unbind to make sure other code does not change it somewhere else
 	glBindVertexArray(0);
 
 }
 
+void Mesh::enableAttribs() {
+	glBindVertexArray(VAO);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+}
+
 //-----------------------------------------------------------------------------
 // Render the mesh
 //-----------------------------------------------------------------------------
+
+static GLuint lastVAO;
 void Mesh::draw(){
 	if (!isLoaded) return;
-	glBindVertexArray(VAO);
+	if (VAO != lastVAO) {
+		glBindVertexArray(0);
+		lastVAO = VAO;
+		glBindVertexArray(VAO);
+		enableAttribs();
+	}
 	glDrawArrays(GL_TRIANGLES, 0, Vertices.size());
-	glBindVertexArray(0);
+
 }
 
 void Mesh::cleanUp() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+}
+
+bool Mesh::getLoaded() {
+	return isLoaded;
 }
 
 

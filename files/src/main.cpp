@@ -152,9 +152,9 @@ int main() {
 	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 
 	//bgSound
-	SoundSystem bgMusic = SoundSystem("res/sounds/sound_1.wav");
-	bgMusic.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
-	bgMusic.setLooping(true);
+	//SoundSystem bgMusic = SoundSystem("res/sounds/sound_1.wav");
+	//bgMusic.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
+	//bgMusic.setLooping(true);
 	//bgMusic.play();
 
 
@@ -162,11 +162,6 @@ int main() {
 	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
 	shader.loadShaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 
-
-
-	Gui randomGui = Gui("res/images/bg.jpg", guiShader);
-	Gui exitGui = Gui("res/images/exit.png", guiShader);
-	Gui play = Gui("res/images/gui/play.png", guiShader);
 
 	Resource apple;
 	apple.setName("Apple");
@@ -207,10 +202,10 @@ int main() {
 	earth.setRotationSpeed(12);
 	earth.setID(16);
 	earth.setDistortion(0);
-	earth.addSubOrbit(moon);
+	//earth.addSubOrbit(moon);
 
-
-	planets.push_back(earth);
+	for(int i = 0; i < 200; i++)
+		planets.push_back(earth);
 
 	earth.setDistanceFromCenter(20);
 	earth.setOrbitalRotationSpeed(14);
@@ -225,22 +220,19 @@ int main() {
 	Mesh shipModel;
 	shipModel.loadMatObj("res/containerCarriage.obj");
 
-	Texture2D shipTexture;
-	shipTexture.loadTexture("res/images/c15_base_temp.png");
 
-	Entity testShip = Entity(shipModel, shipTexture, shader);
+	Entity testShip = Entity(shipModel, shader);
 	testShip.setPosition(glm::vec3(0, 0, 0 ));
 	testShip.setRotation(20, -20, -20);
 
+	std::cout << sizeof(std::vector<int>) + (sizeof(int) * planets.size()) << " - " << planets.size() << std::endl;
+
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
-
 		display.getFrames();
 		display.setDeltaTime();
+		//display.setDeltaTime();
 		glfwPollEvents();
-		randomGui.setDisplay(width, height, window);
-		exitGui.setDisplay(width, height, window);
-		play.setDisplay(width, height, window);
 
 		//Camera movement
 
@@ -261,26 +253,30 @@ int main() {
 		//game state in game
 		if (gameState == inGame) {
 
-			for (int k = 0; k < planets.size(); k++) {
-				Planet planet = planets[k];
-				planet.rotate(display.getDeltaTime() * gameSpeed);
-				planet.orbit(display.getDeltaTime() * gameSpeed);
-
-				planets[k] = planet;
-			};
-
-
-			//object picking
-			for (Planet planet: planets) {
-				planet.planetPickingRender();
+			int movingPlanet = 0;
+			while (movingPlanet < planets.size()) {
+				planets[movingPlanet].orbit(display.getDeltaTime());
+				planets[movingPlanet].rotate(display.getDeltaTime());
+				movingPlanet++;
 			}
+
+
+			
 			
 
 			
 
 
-
+			
 			if (display.mouseLeftPressed()) {
+
+				//object picking
+				int currentPickingPlanet = 0;
+				while (currentPickingPlanet < planets.size()) {
+					planets[currentPickingPlanet].planetPickingRender();
+					currentPickingPlanet++;
+				}
+
 				glFlush();
 				glFinish();
 
@@ -292,14 +288,8 @@ int main() {
 					data[0] +
 					data[1] * 256 +
 					data[2] * 256 * 256;
-
-				for (Planet planet : planets) {
-					if ((int)planet.getID() == (int)pickedID)
-						std::cout << planet.getName() << std::endl;
-				}
+				std::cout << pickedID << std::endl;
 			}
-			
-
 
 			//object rendering
 			if (!boundingBoxes) {
@@ -308,15 +298,20 @@ int main() {
 
 				
 				testShip.render();
-
-				for (Planet planet : planets) {
-					planet.planetTextureRender();
-				}
-				for (Entity planeta : entites) {
-					planeta.getCamera(camera);
-					planeta.render();
+				int currentPlanet = 0;
+				while (currentPlanet < planets.size()) {
+					planets[currentPlanet].planetTextureRender();
+					currentPlanet++;
 				}
 				
+			}
+			else {
+				testShip.pickingRender();
+				int currentPlanet = 0;
+				while (currentPlanet < planets.size()) {
+					planets[currentPlanet].planetPickingRender();
+					currentPlanet++;
+				}
 			}
 			
 
@@ -326,56 +321,7 @@ int main() {
 
 
 
-		//GUI
-		randomGui.setDisplay(width, height, window);
-		randomGui.scaleInPixels(600, 400);
-		randomGui.positionInPixels(10, 10);
-
-		exitGui.setDisplay(width, height, window);
-		exitGui.scaleInPixels(60, 60);
-		exitGui.positionInPixels(width - 70, 10);
-
-
-		//GUI actions
-		if (exitGui.onClick()) {
-			if (bgMusic.isPlaying()) {
-				bgMusic.pause();
-			}
-			else {
-				bgMusic.resume();
-			}
-		}
 		
-
-		
-
-		if (gameState == inGame) {
-			/*if (randomGui.onClick()) {
-				if (gameState == inGame) {
-					gameState = inMainMenu;
-				}
-				else {
-					if (!loadReady)
-						loadEntities();
-					gameState = inGame;
-				}
-			}*/
-			randomGui.render();
-			exitGui.render();
-		}
-		else if(gameState == inMainMenu) {
-			play.render();
-			/*if (play.onClick()) {
-				std::cout << "starting" << std::endl;
-				if (!loadReady)
-					loadEntities();
-				gameState = inGame;
-			}*/
-		}
-		
-		
-		
-
 		//Display updater
 		shader.use();
 		display.update();

@@ -5,16 +5,22 @@ Planet::Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id, vect
 	this->subOrbits = subOrbits;
 }
 
+Planet::Planet(Mesh model, ShaderProgram shader, int id, vector<Planet> subOrbits) : Entity(model, shader, id) {
+	this->subOrbits = subOrbits;
+}
+
 void Planet::rotate(double deltaTime) {
 	int rotY = this->getRotation().y + 0.1f;
 	rotation += rotationSpeed * deltaTime;
 	this->setRotation(0, rotation, 0);
 
-	for (int k = 0; k < subOrbits.size(); k++) {
-		Planet orbit = subOrbits[k];
+	int currentSubOrbit = 0;
+	while (currentSubOrbit < subOrbits.size()) {
+		Planet orbit = subOrbits[currentSubOrbit];
 		orbit.rotate(deltaTime);
-		subOrbits[k] = orbit;
-	};
+		subOrbits[currentSubOrbit] = orbit;
+		currentSubOrbit++;
+	}
 }
 
 void Planet::orbit(double deltaTime) {
@@ -32,12 +38,13 @@ void Planet::orbit(double deltaTime) {
 	this->setPosition(glm::vec3(posX + offset.x + ovalX * distortion, posY + offset.y + circulateOffset, posZ + offset.z + ovalZ * distortion));
 	glm::vec3 currentPos = this->getPosition();
 
-	for (int k = 0; k < subOrbits.size(); k++) {
-		Planet orbit = subOrbits[k];
-		orbit.setOrbitalCenter(currentPos);
+	int currentSubOrbit = 0;
+	while (currentSubOrbit < subOrbits.size()) {
+		Planet orbit = subOrbits[currentSubOrbit];
 		orbit.orbit(deltaTime);
-		subOrbits[k] = orbit;
-	};
+		subOrbits[currentSubOrbit] = orbit;
+		currentSubOrbit++;
+	}
 
 }
 

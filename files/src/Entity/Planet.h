@@ -55,6 +55,7 @@ enum planetType {
 class Planet : public Entity{
 public:
 	Planet(Mesh model, Texture2D texture, ShaderProgram shader, int id, vector<Planet> subOrbits = vector<Planet>());
+	Planet(Mesh model, ShaderProgram shader, int id, vector<Planet> subOrbits = vector<Planet>());
 
 	//movement
 	void rotate(double deltaTime);

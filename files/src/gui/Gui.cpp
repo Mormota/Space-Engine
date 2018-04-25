@@ -7,8 +7,6 @@
 
 
 
-
-
 Gui::Gui(const std::string& texturePath, ShaderProgram shader){
 	texture.loadTexture(texturePath);
 	this->guiShader = shader;
