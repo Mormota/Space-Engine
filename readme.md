@@ -4,7 +4,7 @@ A Low-Poly space engine, written in openGl and with basic space physics.
 
 Current Version: 0.1.1α - Optimizations
 ===
-![Version 0.1.0](https://raw.githubusercontent.com/Mormota/Space-Engine/master/devnotes-material%20-%20v0.1.0A.png)
+![Version 0.1.1](https://media.discordapp.net/attachments/431489274462994443/438758276075880472/devnotes-optimizing_-_v0.1.1A.png?width=1833&height=1031)
 Devnotes:
  - Vertex mesh render optimization
 
