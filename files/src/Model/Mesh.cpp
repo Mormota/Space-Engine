@@ -142,7 +142,7 @@ bool Mesh::loadOBJ(const std::string& filename){
 				glm::vec2 uv = tempUVs[uvIndices[i] - 1];
 				meshVertex.UV = uv;
 			}
-
+			meshVertex.specularColor = glm::vec3(1.0, 1.0, 1.0);
 			Vertices.push_back(meshVertex);
 		}
 
@@ -159,6 +159,7 @@ bool Mesh::loadOBJ(const std::string& filename){
 bool Mesh::loadMTL(const std::string& fileName) {
 	std::vector<std::string> materialNames;
 	std::vector<glm::vec3> materialColors;
+	std::vector<glm::vec3> specularColors, ambientColors;
 	if (fileName.find(".mtl") != std::string::npos) {
 		std::ifstream fin(fileName, std::ios::in);
 		if (!fin) {
@@ -185,6 +186,20 @@ bool Mesh::loadMTL(const std::string& fileName) {
 				ss >> colors.z;
 				materialColors.push_back(colors);
 			}
+			else if(cmd == "Ka"){
+				glm::vec3 ambient;
+				ss >> ambient.x;
+				ss >> ambient.y;
+				ss >> ambient.z;
+				ambientColors.push_back(ambient);
+			}
+			else if (cmd == "Ks") {
+				glm::vec3 specular;
+				ss >> specular.x;
+				ss >> specular.y;
+				ss >> specular.z;
+				specularColors.push_back(specular);
+			}
 		}
 
 		// Close the file
@@ -193,6 +208,8 @@ bool Mesh::loadMTL(const std::string& fileName) {
 			Material material;
 			material.name = materialNames[i];
 			material.color = materialColors[i];
+			material.ambientColor = ambientColors[i];
+			material.specularColor = specularColors[i];
 			Materials.push_back(material);
 		}
 	}
@@ -326,6 +343,8 @@ bool Mesh::loadMatObj(const std::string& fileName) {
 				meshVertex.UV = uv;
 			}
 			meshVertex.color = Materials[materialIndices[i]].color;
+			meshVertex.specularColor = glm::vec3(1.0, 1.0, 1.0);
+			meshVertex.ambientColor = Materials[materialIndices[i]].ambientColor;
 			//std::cout << "Material to vertex - red: " << meshVertex.vertexmaterial.color.x << " green: " << meshVertex.vertexmaterial.color.y << " blue: " << meshVertex.vertexmaterial.color.r << std::endl;
 
 			Vertices.push_back(meshVertex);

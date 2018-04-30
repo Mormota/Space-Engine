@@ -17,11 +17,16 @@ public:
 	void setRadius(float radius);
 
 	glm::vec3 getCamPos();
+	float getYaw();
+	float getViewAngle();
+	glm::vec3 getTargetPos();
 
 
 private:
 	
 	GLFWwindow* window;
+
+	float viewAngle = 45.0f;
 
 	glm::vec3 cameraPosition;
 	vec3 cameraTargetPos;

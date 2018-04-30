@@ -11,6 +11,7 @@
 #include <cstring>
 #include <vector>
 #include <ctime>
+#include <random>
 
 
 #include "GL/glew.h"
@@ -32,6 +33,7 @@
 #include "RendererEngine\RendererEngine.h"
 #include "Entity\Planet.h"
 #include "Content\Resource.h"
+#include "Entity\Ship.h"
 
 #define APIENTRY    WINAPI
 using namespace glm;
@@ -89,47 +91,8 @@ ShaderProgram shader;
 ShaderProgram guiShader;
 
 
-RendererEngine renderer = RendererEngine(shader);
-
 bool loadReady = false;
 bool loadInProgress = false;
-
-void loadEntities() {
-	//alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
-	loadInProgress = true;
-
-	Mesh planet;
-	planet.loadOBJ("res/planetScheme.obj");
-
-	Texture2D texture;
-	texture.loadTexture("res/images/planet.png");
-
-	SoundSystem sound = SoundSystem("res/sounds/bounce.wav");
-	sound.setListenerPos(glm::vec3(1.0f, 1.0f, 1.0f));
-	sound.setLooping(true);
-	//sound.play();
-
-	for (int i = 0; i < 100; i++) {
-		Entity planeta = Entity(planet, texture, shader, 100);
-		planeta.setPosition(glm::vec3(i * 6 - 6, 0.0f, 0.0f));
-		planeta.setID(25);
-		planeta.addSound("res/sounds/ships/basic_selfmade.wav");
-		//planeta.playSound();
-
-		Planet moon = Planet(planet, texture, shader, 36);
-		//moon.setPosition(glm::vec3(0.0f, 0.0f, 25.0f));
-		moon.setID(12);
-
-		entites.push_back(planeta);
-		planets.push_back(moon);
-
-	}
-
-	loadReady = true;
-	loadInProgress = false;
-}
-
-double gameSpeed = 0.5;
 
 int main() {
 
@@ -204,8 +167,9 @@ int main() {
 	earth.setDistortion(0);
 	//earth.addSubOrbit(moon);
 
-	for(int i = 0; i < 200; i++)
+	for (int i = 0; i < 20; i++) {
 		planets.push_back(earth);
+	}
 
 	earth.setDistanceFromCenter(20);
 	earth.setOrbitalRotationSpeed(14);
@@ -218,14 +182,16 @@ int main() {
 	planets.push_back(earth);
 
 	Mesh shipModel;
-	shipModel.loadMatObj("res/containerCarriage.obj");
+	shipModel.loadMatObj("res/models/tradeship.obj");
 
 
-	Entity testShip = Entity(shipModel, shader);
+	Ship testShip = Ship(shipModel, shader);
 	testShip.setPosition(glm::vec3(0, 0, 0 ));
-	testShip.setRotation(20, -20, -20);
+	testShip.templateForces();
 
 	std::cout << sizeof(std::vector<int>) + (sizeof(int) * planets.size()) << " - " << planets.size() << std::endl;
+
+	
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -248,8 +214,6 @@ int main() {
 		double posX, posY;
 		glfwGetCursorPos(window, &posX, &posY);
 
-
-
 		//game state in game
 		if (gameState == inGame) {
 
@@ -259,6 +223,8 @@ int main() {
 				planets[movingPlanet].rotate(display.getDeltaTime());
 				movingPlanet++;
 			}
+
+			testShip.updatePosition(display.getDeltaTime());
 
 
 			
@@ -296,11 +262,10 @@ int main() {
 				display.initDisplay();
 				shader.use();
 
-				
 				testShip.render();
 				int currentPlanet = 0;
 				while (currentPlanet < planets.size()) {
-					planets[currentPlanet].planetTextureRender();
+					planets[currentPlanet].textureRender();
 					currentPlanet++;
 				}
 				
@@ -342,7 +307,7 @@ void keyboardCallback(GLFWwindow* window, int key, int scanCode, int action, int
 	if (gameState == inMainMenu) {
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) glfwSetWindowShouldClose(window, GL_TRUE);
 		if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) gameState = inGame;
-		loadEntities();
+		//loadEntities();
 	} else if (gameState == inGame) {
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) gameState = inMainMenu;
 	}

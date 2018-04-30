@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include <math.h> 
 
 #include "../Model/Mesh.h"
 #include "../Model/Texture2D.h"
@@ -86,14 +87,19 @@ int Entity::getID() {
 
 Entity::~Entity() {}
 
-void Entity::render() {
-	modelMatrix = glm::translate(glm::mat4(), Position) * 
+glm::mat4 Entity::getModelMatrix() {
+
+	return glm::translate(glm::mat4(), Position) *
 		glm::scale(glm::mat4(), Scale * 2.5f) *
-		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
+		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+}
+
+void Entity::render() {
 	
-	shader.setUniform("model", modelMatrix);
+	
+	shader.setUniform("model", this->getModelMatrix());
 
 	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
 	shader.setUniform("pickingVector", glm::vec2(0.0f, 0.0f));
@@ -121,20 +127,17 @@ void Entity::textureRender() {
 }
 
 void Entity::pickingRender() {
-	modelMatrix = glm::translate(glm::mat4(), Position) *
-		glm::scale(glm::mat4(), Scale - 2.5f) *
-		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
-		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
-		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	//std::cout << Position.x << " position " << std::endl;
 
-	shader.setUniform("model", modelMatrix);
+	shader.setUniform("model", this->getModelMatrix());
 	shader.setUniform("pickingColor", glm::vec3(r / 255.0f, g / 255.0f, b / 255.0f));
 	shader.setUniform("pickingVector", glm::vec2(1.0f, 0.0f));
 
 	mesh.draw();
 }
+
+
 
 glm::vec3 Entity::getId() {
 	return glm::vec3(r, g, b);

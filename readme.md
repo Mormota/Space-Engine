@@ -2,14 +2,19 @@ Space Engine
 ----
 A Low-Poly space engine, written in openGl and with basic space physics.
 
-Current Version: 0.1.1α - Optimizations
+Current Version: 0.1.2α - Target Movement
 ===
-![Version 0.1.1](https://github.com/Mormota/Space-Engine/blob/master/devnotes-optimizing_-_v0.1.1A.png?raw=true)
+![Version 0.1.2](https://github.com/Mormota/Space-Engine/blob/master/devnotes%20-%20v0.1.2A.png?raw=true)
 Devnotes:
- - Vertex mesh render optimization
+ - Ship target movement system
 
 Outstanding Version History:
 ====
+### Version 0.1.1α - Optimization
+![Version 0.1.1](https://github.com/Mormota/Space-Engine/blob/master/devnotes-optimizing_-_v0.1.1A.png?raw=true)
+Devnotes:
+	- Vertex mesh render optimization
+
 ### Version 0.1.0α - Material rendering
 ![Version 0.1.0](https://raw.githubusercontent.com/Mormota/Space-Engine/master/devnotes-material%20-%20v0.1.0A.png)
 Devnotes:

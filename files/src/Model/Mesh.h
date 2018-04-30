@@ -12,6 +12,8 @@
 struct Material {
 	std::string name;
 	glm::vec3 color;
+	glm::vec3 ambientColor;
+	glm::vec3 specularColor;
 };
 
 struct Vertex {
@@ -20,6 +22,8 @@ struct Vertex {
 	glm::vec3 normal;
 	glm::vec2 UV;
 	glm::vec3 color;
+	glm::vec3 ambientColor;
+	glm::vec3 specularColor;
 };
 
 class Mesh

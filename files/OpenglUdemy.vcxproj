@@ -24,6 +24,7 @@
     <ClCompile Include="src\Display\Display.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\Planet.cpp" />
+    <ClCompile Include="src\Entity\Ship.cpp" />
     <ClCompile Include="src\gui\Gui.cpp" />
     <ClCompile Include="src\gui\Text.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="src\Display\Display.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\Planet.h" />
+    <ClInclude Include="src\Entity\Ship.h" />
     <ClInclude Include="src\gui\Gui.h" />
     <ClInclude Include="src\gui\Text.h" />
     <ClInclude Include="src\Model\Mesh.h" />

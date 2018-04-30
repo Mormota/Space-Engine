@@ -104,6 +104,9 @@
     <ClCompile Include="src\Content\Resource.cpp">
       <Filter>Source Files\Content</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entity\Ship.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera\Camera.h">
@@ -141,6 +144,9 @@
     </ClInclude>
     <ClInclude Include="src\Content\Resource.h">
       <Filter>Header Files\Content</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entity\Ship.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

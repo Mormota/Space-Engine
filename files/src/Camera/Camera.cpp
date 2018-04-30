@@ -50,3 +50,14 @@ void Camera::updateCameraVectors() {
 glm::vec3 Camera::getCamPos() {
 	return cameraPosition;
 }
+glm::vec3 Camera::getTargetPos() {
+	return targetPosition;
+}
+
+float Camera::getYaw() {
+	return degrees(cameraYaw);
+}
+
+float Camera::getViewAngle() {
+	return viewAngle;
+}

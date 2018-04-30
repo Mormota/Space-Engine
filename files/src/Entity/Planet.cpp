@@ -156,6 +156,7 @@ void Planet::planetPickingRender() {
 
 
 
+
 void Planet::setCirculateAngle(float angle) {
 	orbitAngle = angle;
 }

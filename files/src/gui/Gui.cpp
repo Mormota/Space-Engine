@@ -5,8 +5,6 @@
 #include "../Model/Mesh.h"
 #include "../Model/Texture2D.h"
 
-
-
 Gui::Gui(const std::string& texturePath, ShaderProgram shader){
 	texture.loadTexture(texturePath);
 	this->guiShader = shader;

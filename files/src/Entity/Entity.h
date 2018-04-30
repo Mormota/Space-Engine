@@ -30,8 +30,10 @@ public:
 	void setPickingShader(ShaderProgram pickingShader);
 	
 	void render();
+	void frostumRender(Camera camera);
 	void pickingRender();
 	void textureRender();
+	void frostumTextureRender(Camera camera);
 
 	glm::vec3 getId();
 
@@ -43,6 +45,8 @@ public:
 	void setScale(float scale);
 	void initData();
 	int getID();
+
+	glm::mat4 getModelMatrix();
 
 	Mesh getMesh();
 	Texture2D getTexture();

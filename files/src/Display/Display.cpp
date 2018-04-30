@@ -134,7 +134,7 @@ void Display::useShader(ShaderProgram shader, Camera camera) {
 
 	viewMatrix = camera.getViewMatrix();
 
-	projectionMatrix = glm::perspective(radians(45.0f), (float)width / height, 0.1f, 1000.0f);
+	projectionMatrix = glm::perspective(radians(camera.getViewAngle()), (float)width / height, 0.1f, 1000.0f);
 
 	shader.setUniform("view", viewMatrix);
 	shader.setUniform("projection", projectionMatrix);
