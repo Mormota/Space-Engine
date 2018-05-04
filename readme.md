@@ -3,7 +3,7 @@ Space Engine
 A Low-Poly space engine, written in openGl and with basic space physics.
 
 Project's trello page: [Link to Trello page](https://trello.com/b/ZMqFh6iR/space-engine "Space Engine")
-======
+----
 
 Current Version: 0.1.2α - Target Movement
 ===
