@@ -2,9 +2,12 @@ Space Engine
 ----
 A Low-Poly space engine, written in openGl and with basic space physics.
 
+Project's trello page: [Link to Trello page](https://trello.com/b/ZMqFh6iR/space-engine "Space Engine")
+----
+
 Current Version: 0.1.2α - Target Movement
 ===
-![Version 0.1.2](https://github.com/Mormota/Space-Engine/blob/master/devnotes%20-%20v0.1.2A.png?raw=true)
+![Version 0.1.2](https://github.com/Mormota/Space-Engine/blob/master/devnotes-targetMovement%20-%20v0.1.2A.png?raw=true)
 Devnotes:
  - Ship target movement system
 
