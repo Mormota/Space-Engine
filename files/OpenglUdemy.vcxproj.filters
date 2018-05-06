@@ -150,12 +150,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\shaders\fragment.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="bin\shaders\vertex.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="bin\shaders\guiFragment.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -163,5 +157,11 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\.gitignore" />
+    <None Include="bin\shaders\fragment.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="bin\shaders\vertex.hlsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

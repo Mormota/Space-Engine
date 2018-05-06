@@ -90,7 +90,7 @@ Entity::~Entity() {}
 glm::mat4 Entity::getModelMatrix() {
 
 	return glm::translate(glm::mat4(), Position) *
-		glm::scale(glm::mat4(), Scale * 2.5f) *
+		glm::scale(glm::mat4(), Scale) *
 		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -110,7 +110,7 @@ void Entity::render() {
 
 void Entity::textureRender() {
 	modelMatrix = glm::translate(glm::mat4(), Position) *
-		glm::scale(glm::mat4(), Scale * 2.5f) *
+		glm::scale(glm::mat4(), Scale) *
 		glm::rotate(glm::mat4(), glm::radians(rotX), glm::vec3(1.0f, 0.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotY), glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::rotate(glm::mat4(), glm::radians(rotZ), glm::vec3(0.0f, 0.0f, 1.0f));

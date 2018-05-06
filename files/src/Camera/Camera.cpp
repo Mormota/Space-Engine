@@ -29,7 +29,7 @@ void Camera::setLookAt(const vec3& target) {
 }
 
 void Camera::setRadius(float radius) {
-	cameraRadius = clamp(radius, 0.0f, 250.0f);
+	cameraRadius = clamp(radius, 0.0f, 500.0f);
 }
 
 void Camera::rotate(float yaw, float pitch) {

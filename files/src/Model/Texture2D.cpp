@@ -2,6 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <iostream>
+#include <glm\glm.hpp>
 #include "stb\stb_image.h"
 
 Texture2D::Texture2D():textureID(0) {}
@@ -18,6 +19,7 @@ bool Texture2D::loadTexture(const string& fileName, bool generateMipMaps) {
 		return false;
 	}
 	//invertation
+	this->width = width, this->height = height;
 	int widthInBytes = width * 4;
 	unsigned char * top = NULL;
 	unsigned char * bottom = NULL;
@@ -66,4 +68,8 @@ void Texture2D::unBind(GLuint texUnit) {
 
 GLuint Texture2D::getID() {
 	return textureID;
+}
+
+glm::vec2 Texture2D::getDimentsions() {
+	return glm::vec2(width, height);
 }

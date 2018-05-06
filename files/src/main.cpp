@@ -77,6 +77,42 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 //AudioFile<double> audioFile;
 
+void characterRender(std::vector<Character> characters, ShaderProgram shader, int windowWidth, int windowHeight) {
+	static float xOffset = 0;
+	int charNumber = characters.size();
+	
+
+	for (int i = 0; i < charNumber; i++) {
+		if (i == 0) {
+			xOffset = 0;
+		}
+		characters[i].render(shader, windowWidth, windowHeight, xOffset);
+		xOffset = (float)characters[i].getFont().xAdvance;
+	}
+}
+
+std::vector<Character> text(std::string text, FontFamily family) {
+	std::vector<Character> res;
+	std::vector<char> chars(text.begin(), text.end());
+	for (char Char : chars) {
+		Character character = Character(family, Char, glm::vec2(width, height));
+		res.push_back(character);
+
+	}
+
+	static float xOffset = 0;
+	int charNumber = res.size();
+	for (int i = 0; i < charNumber; i++) {
+		if (i == 0) {
+			xOffset = 0;
+		}
+
+		std::cout << "ID: " << res[i].getFont().id << " - " << res[i].getFont().xAdvance << std::endl;
+
+	}
+	return res;
+}
+
 
 ALCdevice* device;
 ALCcontext* context;
@@ -123,7 +159,7 @@ int main() {
 
 	//Shader init
 	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
-	shader.loadShaders("shaders/vertex.glsl", "shaders/fragment.glsl");
+	shader.loadShaders("shaders/vertex.hlsl", "shaders/fragment.hlsl");
 
 
 	Resource apple;
@@ -191,7 +227,8 @@ int main() {
 
 	std::cout << sizeof(std::vector<int>) + (sizeof(int) * planets.size()) << " - " << planets.size() << std::endl;
 
-	
+	FontFamily arial = FontFamily("res/fonts/depth/candara.png");
+	std::vector<Character> charList = text("Lorem-ipsum dolor sit amet, consectetur adipiscing elit.", arial);
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -278,6 +315,7 @@ int main() {
 					currentPlanet++;
 				}
 			}
+			characterRender(charList, shader, width, height);
 			
 
 		}	
@@ -373,7 +411,7 @@ void mouseMoveCallback(GLFWwindow* window, double posX, double posY) {
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
 	//std::cout << xoffset << " - " << yoffset << std::endl;
 	cameraRadius -= yoffset * 5;
-	cameraRadius = glm::clamp(cameraRadius, 10.0f, 250.0f);
+	cameraRadius = glm::clamp(cameraRadius, 10.0f, 500.0f);
 
 }
 

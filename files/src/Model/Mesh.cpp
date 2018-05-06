@@ -360,6 +360,14 @@ bool Mesh::loadMatObj(const std::string& fileName) {
 	return false;
 }
 
+void Mesh::setUVs(std::vector<glm::vec2> uvs) {
+	for (int i = 0; i < uvs.size(); i++)
+	{
+		Vertices[i].UV = uvs[i];
+	}
+
+	initBuffers();
+}
 
 void Mesh::initBuffers(){
 	glGenVertexArrays(1, &VAO);

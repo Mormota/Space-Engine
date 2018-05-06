@@ -112,6 +112,12 @@ private:
 	
 	Cargo currentCargo;
 	float maxCargoMass = 100;
+
+	double p1(double x);
+	double p2(double x);
+	double p3(double x);
+	double p4(double x);
+	double curvetate(double x);
 };
 
 #endif // !SHIP_H

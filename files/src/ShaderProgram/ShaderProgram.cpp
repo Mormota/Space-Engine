@@ -123,6 +123,16 @@ void ShaderProgram::setUniform(const GLchar* name, const glm::mat4& m) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
 }
 
+void ShaderProgram::setUniform(const GLchar* name, const float value) {
+	GLint location = getUniformLocation(name);
+	glUniform1f(location, value);
+}
+
+void ShaderProgram::setUniform(const GLchar* name, const bool value) {
+	GLint location = getUniformLocation(name);
+	glUniform1i(location, value);
+}
+
 GLint ShaderProgram::getUniformLocation(const GLchar* name) {
 	map<string, GLint>::iterator it = UniformLocations.find(name);
 

@@ -3,6 +3,7 @@
 #include "GL\glew.h"
 #include <string>
 #include "stb\stb_image.h"
+#include <glm/glm.hpp>
 using namespace std;
 
 #ifndef TEXTURE2D_H
@@ -19,8 +20,12 @@ public:
 	void bind(GLuint texUnit = 0);
 	void unBind(GLuint texUnit = 0);
 
+	glm::vec2 getDimentsions();
+
 private:
 	GLuint textureID;
+
+	int height, width;
 };
 
 #endif // !TEXTURE2D_H

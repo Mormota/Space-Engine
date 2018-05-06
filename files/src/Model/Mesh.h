@@ -40,6 +40,8 @@ public:
 
 	bool getLoaded();
 
+	void setUVs(std::vector<glm::vec2> UVs);
+
 private:
 	std::string filename;
 	void initBuffers();

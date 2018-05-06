@@ -51,10 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.gitignore" />
-    <None Include="bin\shaders\fragment.glsl" />
+    <None Include="bin\shaders\fragment.hlsl" />
     <None Include="bin\shaders\guiFragment.glsl" />
     <None Include="bin\shaders\guiVertex.glsl" />
-    <None Include="bin\shaders\vertex.glsl" />
+    <None Include="bin\shaders\vertex.hlsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
