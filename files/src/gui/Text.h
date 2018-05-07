@@ -9,7 +9,7 @@
 struct Font
 {
 	int id;
-	int x, y, width, height, xOffset, yOffset, xAdvance;
+	int x, y, width, height, xOffset, yOffset, xAdvance, lineHeight;
 };
 
 class FontFamily
@@ -36,13 +36,13 @@ private:
 #endif
 
 #ifndef CHARACTER_H
-#define CHARACTER_G
+#define CHARACTER_H
 
 class Character
 {
 public:
-	Character(FontFamily family, char chr, glm::vec2 display);
-	void render(ShaderProgram shader, int windowHeight, int windowWidth, float xOffset);
+	Character(FontFamily family, char chr);
+	void render(ShaderProgram shader, int windowHeight, int windowWidth, glm::vec2 relativeOffset);
 	Font getFont();
 private:
 	float fontSize = 1;
@@ -51,16 +51,91 @@ private:
 	glm::vec2 fontPosition;
 
 	glm::vec3 textColor = glm::vec3(1.0, 1.0, 1.0);
-	float textWidth = 0.5;
+	float textWidth = 0.0;
 	float textEdge = 0.01;
 
-	glm::vec3 textOutlineColor = glm::vec3(0.5, 0.5, 0.5);
-	float outlineWidth = 0.6;
+	glm::vec3 textOutlineColor = glm::vec3(1.0, 1.0, 1.0);
+	float outlineWidth = 0.5;
 	float outlineEdge = 0.01;
 
 	Mesh mesh;
 	Font font;
 	FontFamily family;
+};
+
+#endif
+
+#ifndef WORD_H
+#define WORD_H
+
+class Word
+{
+public:
+	Word(std::string word, FontFamily family, ShaderProgram shader, float textSize);
+	float getWidth();
+	
+	void render(glm::vec2 wordPosition, glm::vec2 displayDimensions);
+private:
+	std::vector<char> getCharacters(std::string word);
+
+	std::string word;
+	FontFamily family;
+	ShaderProgram shader;
+	float wordLenghtInPixels;
+	float textSize;
+	std::vector<Character> characters;
+};
+
+#endif
+
+#ifndef LINE_H
+#define LINE_H
+
+class Line
+{
+public:
+	Line(FontFamily family, ShaderProgram shader, float textSize, float maxLenght);
+	float getLineWidth;
+	bool addWord(Word);
+	void render(glm::vec2 linePosition, glm::vec2 displayDimensions);
+private:
+	
+
+	float spaceLenght;
+	ShaderProgram shader;
+	FontFamily family;
+	float textSize;
+	float currentLineWidth;
+	float maxLenght;
+	std::vector<Word> words;
+};
+
+#endif
+
+#ifndef TEXT_H
+#define TEXT_H
+
+
+
+class Text
+{
+public:
+	Text(std::string text, FontFamily family, ShaderProgram shader, float textSize, glm::vec2 textPosition, float textLenght);
+
+	void render(glm::vec2 displayDimensions);
+private:
+
+	std::vector<std::string> getWords(std::string string);
+
+	std::vector<Word> words;
+	std::vector<Line> lines;
+
+	float lineHeight;
+	std::string text;
+	FontFamily family;
+	ShaderProgram shader;
+	float textSize, textLenght;
+	glm::vec2 textPosition;
 };
 
 #endif

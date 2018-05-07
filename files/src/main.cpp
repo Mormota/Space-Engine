@@ -78,16 +78,16 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 //AudioFile<double> audioFile;
 
 void characterRender(std::vector<Character> characters, ShaderProgram shader, int windowWidth, int windowHeight) {
-	static float xOffset = 0;
+	static glm::vec2 xOffset;
 	int charNumber = characters.size();
 	
 
 	for (int i = 0; i < charNumber; i++) {
 		if (i == 0) {
-			xOffset = 0;
+			xOffset.x = 0;
 		}
 		characters[i].render(shader, windowWidth, windowHeight, xOffset);
-		xOffset = (float)characters[i].getFont().xAdvance;
+		xOffset.x += (float)characters[i].getFont().xAdvance;
 	}
 }
 
@@ -95,19 +95,8 @@ std::vector<Character> text(std::string text, FontFamily family) {
 	std::vector<Character> res;
 	std::vector<char> chars(text.begin(), text.end());
 	for (char Char : chars) {
-		Character character = Character(family, Char, glm::vec2(width, height));
+		Character character = Character(family, Char);
 		res.push_back(character);
-
-	}
-
-	static float xOffset = 0;
-	int charNumber = res.size();
-	for (int i = 0; i < charNumber; i++) {
-		if (i == 0) {
-			xOffset = 0;
-		}
-
-		std::cout << "ID: " << res[i].getFont().id << " - " << res[i].getFont().xAdvance << std::endl;
 
 	}
 	return res;
@@ -227,8 +216,16 @@ int main() {
 
 	std::cout << sizeof(std::vector<int>) + (sizeof(int) * planets.size()) << " - " << planets.size() << std::endl;
 
-	FontFamily arial = FontFamily("res/fonts/depth/candara.png");
+	FontFamily arial = FontFamily("res/fonts/depth/arial.png");
 	std::vector<Character> charList = text("Lorem-ipsum dolor sit amet, consectetur adipiscing elit.", arial);
+
+	//Word testWord = Word("alma", arial, shader, 1.0f);
+
+	Line testLine = Line(arial, shader, 1, 1820);
+	testLine.addWord(Word("alma", arial, shader, 1.0f));
+	testLine.addWord(Word("csutka", arial, shader, 1.0f));
+
+	Text testText = Text("Lorem ipsum dolor sit amet, lorem ipsum dolor siz amet", arial, shader, 1.0f, glm::vec2(-1, 0), 1200);
 
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -315,8 +312,8 @@ int main() {
 					currentPlanet++;
 				}
 			}
-			characterRender(charList, shader, width, height);
-			
+			//testLine.render(glm::vec2(0, 0), glm::vec2(width, height));
+			testText.render(glm::vec2(width, height));
 
 		}	
 
