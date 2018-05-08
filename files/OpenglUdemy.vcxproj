@@ -22,6 +22,7 @@
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="src\Content\Resource.cpp" />
     <ClCompile Include="src\Display\Display.cpp" />
+    <ClCompile Include="src\Display\PProcessingPipeline.cpp" />
     <ClCompile Include="src\Entity\Entity.cpp" />
     <ClCompile Include="src\Entity\Planet.cpp" />
     <ClCompile Include="src\Entity\Ship.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Content\Resource.h" />
     <ClInclude Include="src\Display\Display.h" />
+    <ClInclude Include="src\Display\PProcessingPipeline.h" />
     <ClInclude Include="src\Entity\Entity.h" />
     <ClInclude Include="src\Entity\Planet.h" />
     <ClInclude Include="src\Entity\Ship.h" />

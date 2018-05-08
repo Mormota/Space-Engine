@@ -34,13 +34,14 @@
 #include "Entity\Planet.h"
 #include "Content\Resource.h"
 #include "Entity\Ship.h"
+#include "Display\PProcessingPipeline.h"
 
 #define APIENTRY    WINAPI
 using namespace glm;
 
 int width = 1280, height = 720;
 GLFWwindow* window = NULL;
-
+double posX, posY;
 
 
 bool wireFrame = false;
@@ -75,34 +76,6 @@ void resizeCallback(GLFWwindow* window, int width, int height);
 void mouseMoveCallback(GLFWwindow* window, double posX, double posY);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-//AudioFile<double> audioFile;
-
-void characterRender(std::vector<Character> characters, ShaderProgram shader, int windowWidth, int windowHeight) {
-	static glm::vec2 xOffset;
-	int charNumber = characters.size();
-	
-
-	for (int i = 0; i < charNumber; i++) {
-		if (i == 0) {
-			xOffset.x = 0;
-		}
-		characters[i].render(shader, windowWidth, windowHeight, xOffset);
-		xOffset.x += (float)characters[i].getFont().xAdvance;
-	}
-}
-
-std::vector<Character> text(std::string text, FontFamily family) {
-	std::vector<Character> res;
-	std::vector<char> chars(text.begin(), text.end());
-	for (char Char : chars) {
-		Character character = Character(family, Char);
-		res.push_back(character);
-
-	}
-	return res;
-}
-
-
 ALCdevice* device;
 ALCcontext* context;
 
@@ -114,10 +87,6 @@ Camera camera;
 
 ShaderProgram shader;
 ShaderProgram guiShader;
-
-
-bool loadReady = false;
-bool loadInProgress = false;
 
 int main() {
 
@@ -149,15 +118,9 @@ int main() {
 	//Shader init
 	guiShader.loadShaders("shaders/guiVertex.glsl", "shaders/guiFragment.glsl");
 	shader.loadShaders("shaders/vertex.hlsl", "shaders/fragment.hlsl");
-
-
-	Resource apple;
-	apple.setName("Apple");
-	apple.setPrices(100, 125, 140);
-	
+	PostProcessing postProcessing = PostProcessing(shader, 5000, 5000);
 
 	
-	//loadEntities();
 
 	
 
@@ -220,16 +183,17 @@ int main() {
 
 	Text testText = Text("Lorem ipsum dolor sit amet, lorem ipsum dolor siz amet", arial, shader, 50, glm::vec2(width / 2, 0), 1200);
 	testText.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+
+	
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
 		glm::vec2 displayDimensions = glm::vec2(width, height);
+		glfwGetCursorPos(window, &posX, &posY);
 		display.getFrames();
 		display.setDeltaTime();
-		//display.setDeltaTime();
 		glfwPollEvents();
 
 		//Camera movement
-
 		camera.setLookAt(targetPosition);
 		camera.rotate(cameraYaw, cameraPitch);
 		camera.setRadius(cameraRadius);
@@ -237,14 +201,14 @@ int main() {
 		//Camera usage
 		display.initDisplay();
 		display.useShader(shader, camera, displayDimensions);
+		shader.use();
 
-
-		double posX, posY;
-		glfwGetCursorPos(window, &posX, &posY);
+		//ProstProcessing
+		postProcessing.init();
+		
 
 		//game state in game
 		if (gameState == inGame) {
-
 			int movingPlanet = 0;
 			while (movingPlanet < planets.size()) {
 				planets[movingPlanet].orbit(display.getDeltaTime());
@@ -254,14 +218,6 @@ int main() {
 
 			testShip.updatePosition(display.getDeltaTime());
 
-
-			
-			
-
-			
-
-
-			
 			if (display.mouseLeftPressed()) {
 
 				//object picking
@@ -306,16 +262,15 @@ int main() {
 					currentPlanet++;
 				}
 			}
-			//testLine.render(glm::vec2(0, 0), glm::vec2(width, height));
-			testText.render(displayDimensions);
+
+			postProcessing.render(width, height);
+
+			///GUI RENDERING
+			testText.render(glm::vec2(width, height));
 
 		}	
 
-		
 
-
-
-		
 		//Display updater
 		shader.use();
 		display.update();

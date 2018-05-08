@@ -107,6 +107,9 @@
     <ClCompile Include="src\Entity\Ship.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\Display\PProcessingPipeline.cpp">
+      <Filter>Source Files\Display</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera\Camera.h">
@@ -147,6 +150,9 @@
     </ClInclude>
     <ClInclude Include="src\Entity\Ship.h">
       <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Display\PProcessingPipeline.h">
+      <Filter>Header Files\Display</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -21,9 +21,9 @@ public:
 	void unBind(GLuint texUnit = 0);
 
 	glm::vec2 getDimentsions();
-
-private:
 	GLuint textureID;
+private:
+	
 
 	int height, width;
 };
