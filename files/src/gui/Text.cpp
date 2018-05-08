@@ -65,7 +65,7 @@ void FontFamily::loadFontFamily(std::string filePath) {
 
 	std::string lineBuffer;
 	std::cout << "Font atlas oppened: " << fileName << std::endl;
-	int lineHeight;
+	int lineHeight, fontSize;
 	while (std::getline(fin, lineBuffer)) {
 		std::vector<std::string> tokens = tokenSplit(lineBuffer, "     ");
 		Font font;
@@ -80,6 +80,9 @@ void FontFamily::loadFontFamily(std::string filePath) {
 			}
 			if (cmd == "lineHeight") {
 				lineHeight = std::stoi(value);
+			}
+			else if (cmd == "size") {
+				fontSize = std::stoi(value);
 			}
 			if (cmd == "id") {
 				font.id = std::stoi(value);
@@ -108,6 +111,7 @@ void FontFamily::loadFontFamily(std::string filePath) {
 			}
 
 			font.lineHeight = lineHeight;
+			font.size = fontSize;
 
 			
 		}
@@ -178,6 +182,11 @@ Character::Character(FontFamily family, char chr) {
 
 	mesh.setUVs(uvs);
 }
+
+void Character::setFontSize(float fontSize) {
+	float relativeFontSize = fontSize / font.size;
+	this->fontSize = relativeFontSize;
+}
 void Character::render(ShaderProgram shader, int windowWidth, int windowHeight, glm::vec2 relativeFontOffset) {
 	
 	glm::vec2 displayDimensions = glm::vec2(windowWidth, windowHeight);
@@ -193,7 +202,7 @@ void Character::render(ShaderProgram shader, int windowWidth, int windowHeight, 
 
 	glm::vec2 position = fontPosition + relativePos + (fontOffset) / displayDimensions;
 
-	position += (relativeFontOffset / displayDimensions) * fontSize * 1.2f;
+	position += relativeFontOffset / displayDimensions;
 
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(), glm::vec3(position, 0.0f)) * 
 		glm::scale(glm::mat4(), glm::vec3(fontScale, 1.0f))  *
@@ -226,6 +235,10 @@ Font Character::getFont() {
 	return font;
 }
 
+void Character::setColor(glm::vec3 color) {
+	this->textColor = color;
+}
+
 std::vector<char> Word::getCharacters(std::string word) {
 	std::vector<char> res;
 	std::vector<char> chars(word.begin(), word.end());
@@ -247,11 +260,16 @@ Word::Word(std::string word, FontFamily family, ShaderProgram shader, float text
 	float lenghtInPixels = 0;
 	for (int i = 0; i < wordLength; i++) {
 		Character character = Character(family, chars[i]);
+		character.setFontSize(textSize);
 		lenghtInPixels += character.getFont().xAdvance;
 		characters.push_back(character);
 	}
 
 	wordLenghtInPixels = lenghtInPixels;
+}
+
+void Word::setColor(glm::vec3 color) {
+	this->color = color;
 }
 
 float Word::getWidth() {
@@ -262,13 +280,13 @@ void Word::render(glm::vec2 wordPosition, glm::vec2 displayDimensions) {
 	glm::vec2 position;
 	int charNumber = characters.size();
 
-
 	for (int i = 0; i < charNumber; i++) {
 		if (i == 0) {
 			position = wordPosition;
 		}
+		characters[i].setColor(color);
 		characters[i].render(shader, displayDimensions.x, displayDimensions.y, position);
-		position.x += characters[i].getFont().xAdvance;
+		position.x += characters[i].getFont().xAdvance * (textSize / characters[i].getFont().size) * 1.2f;
 	}
 }
 
@@ -297,9 +315,14 @@ void Line::render(glm::vec2 linePosition, glm::vec2 displayDimensions) {
 	for (int i = 0; i < wordNumber; i++) {
 		if (i == 0)
 			wordOffset = 0;
-		words[i].render(linePosition + glm::vec2(wordOffset, 0), displayDimensions);
+		words[i].setColor(color);
+		words[i].render(linePosition + glm::vec2(wordOffset, 1), displayDimensions);
 		wordOffset += words[i].getWidth() + spaceLenght;
 	}
+}
+
+void Line::setColor(glm::vec3 color) {
+	this->color = color;
 }
 
 
@@ -328,23 +351,18 @@ Text::Text(std::string text, FontFamily family, ShaderProgram shader, float text
 	this->textSize = textSize;
 	this->textPosition = textPosition;
 	this->lineHeight = family.getFont(' ').lineHeight;
-	std::cout << "Line height " << lineHeight << std::endl;
+	this->fontHeight = family.getFont(' ').size;
+	std::cout << textSize / fontHeight << std::endl;
 	
 	std::vector<std::string> wordString = getWords(text);
 	int wordNum = wordString.size();
 	
 	Line CurrentLine = Line(family, shader, textSize, textLenght);
-	
-	/*for (int i = 0; i < wordNum; i++) {
-		Word word = Word(wordString[i], family, shader, textSize);
-		words.push_back(word);
-	}*/
 
 	for (int i = 0; i < wordNum; i++) {
 		Word word = Word(wordString[i], family, shader, textSize);
 		if (CurrentLine.addWord(word)) {}
 		else {
-			std::cout << "Initing lines" << std::endl;
 			lines.push_back(CurrentLine);
 			CurrentLine = Line(family, shader, textSize, textLenght);
 			CurrentLine.addWord(word);
@@ -356,12 +374,19 @@ Text::Text(std::string text, FontFamily family, ShaderProgram shader, float text
 
 void Text::render(glm::vec2 displayDimensions) {
 	
-	glm::vec2 linePosition = glm::vec2(0,0);
+	glm::vec2 linePosition = textPosition;
 
 	int lineNumber = lines.size();
 	for (int i = 0; i < lineNumber; i++) {
-		std::cout << "Rendering line" << linePosition.y << std::endl;
-		lines[i].render(linePosition + displayDimensions / 2.0f, displayDimensions);
-		linePosition.y -= lineHeight * textSize;
+		lines[i].render(linePosition, displayDimensions);
+		linePosition.y -= lineHeight;
+	}
+}
+
+void Text::setColor(glm::vec3 color) {
+	this->color = color;
+	int lineNum = lines.size();
+	for (int i = 0; i < lineNum; i++) {
+		lines[i].setColor(color);
 	}
 }

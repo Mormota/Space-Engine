@@ -21,7 +21,7 @@ public:
 	void getFrames();
 	void initDisplay();
 
-	void useShader(ShaderProgram shader, Camera camera);
+	void useShader(ShaderProgram shader, Camera camera, glm::vec2 displayDimensions);
 	void usePickingShader(ShaderProgram shader, Camera camera);
 	void cleanUpPickingShader();
 

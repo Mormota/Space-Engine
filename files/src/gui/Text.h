@@ -9,7 +9,7 @@
 struct Font
 {
 	int id;
-	int x, y, width, height, xOffset, yOffset, xAdvance, lineHeight;
+	int x, y, width, height, xOffset, yOffset, xAdvance, lineHeight, size;
 };
 
 class FontFamily
@@ -43,6 +43,8 @@ class Character
 public:
 	Character(FontFamily family, char chr);
 	void render(ShaderProgram shader, int windowHeight, int windowWidth, glm::vec2 relativeOffset);
+	void setColor(glm::vec3 color);
+	void setFontSize(float fontSize);
 	Font getFont();
 private:
 	float fontSize = 1;
@@ -51,11 +53,11 @@ private:
 	glm::vec2 fontPosition;
 
 	glm::vec3 textColor = glm::vec3(1.0, 1.0, 1.0);
-	float textWidth = 0.0;
-	float textEdge = 0.01;
+	float textWidth = 0.5;
+	float textEdge = 0.1;
 
 	glm::vec3 textOutlineColor = glm::vec3(1.0, 1.0, 1.0);
-	float outlineWidth = 0.5;
+	float outlineWidth = 0.3;
 	float outlineEdge = 0.01;
 
 	Mesh mesh;
@@ -72,6 +74,7 @@ class Word
 {
 public:
 	Word(std::string word, FontFamily family, ShaderProgram shader, float textSize);
+	void setColor(glm::vec3 color);
 	float getWidth();
 	
 	void render(glm::vec2 wordPosition, glm::vec2 displayDimensions);
@@ -84,6 +87,8 @@ private:
 	float wordLenghtInPixels;
 	float textSize;
 	std::vector<Character> characters;
+
+	glm::vec3 color;
 };
 
 #endif
@@ -95,12 +100,13 @@ class Line
 {
 public:
 	Line(FontFamily family, ShaderProgram shader, float textSize, float maxLenght);
+	void setColor(glm::vec3 color);
 	float getLineWidth;
 	bool addWord(Word);
 	void render(glm::vec2 linePosition, glm::vec2 displayDimensions);
 private:
 	
-
+	glm::vec3 color = glm::vec3(1,1,1);
 	float spaceLenght;
 	ShaderProgram shader;
 	FontFamily family;
@@ -121,16 +127,18 @@ class Text
 {
 public:
 	Text(std::string text, FontFamily family, ShaderProgram shader, float textSize, glm::vec2 textPosition, float textLenght);
+	void setColor(glm::vec3 color);
 
 	void render(glm::vec2 displayDimensions);
 private:
-
+	glm::vec3 color = glm::vec3(1.0f,1.0f,1.0f);
 	std::vector<std::string> getWords(std::string string);
 
 	std::vector<Word> words;
 	std::vector<Line> lines;
 
 	float lineHeight;
+	float fontHeight;
 	std::string text;
 	FontFamily family;
 	ShaderProgram shader;

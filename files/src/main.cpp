@@ -217,18 +217,12 @@ int main() {
 	std::cout << sizeof(std::vector<int>) + (sizeof(int) * planets.size()) << " - " << planets.size() << std::endl;
 
 	FontFamily arial = FontFamily("res/fonts/depth/arial.png");
-	std::vector<Character> charList = text("Lorem-ipsum dolor sit amet, consectetur adipiscing elit.", arial);
 
-	//Word testWord = Word("alma", arial, shader, 1.0f);
-
-	Line testLine = Line(arial, shader, 1, 1820);
-	testLine.addWord(Word("alma", arial, shader, 1.0f));
-	testLine.addWord(Word("csutka", arial, shader, 1.0f));
-
-	Text testText = Text("Lorem ipsum dolor sit amet, lorem ipsum dolor siz amet", arial, shader, 1.0f, glm::vec2(-1, 0), 1200);
-
+	Text testText = Text("Lorem ipsum dolor sit amet, lorem ipsum dolor siz amet", arial, shader, 50, glm::vec2(width / 2, 0), 1200);
+	testText.setColor(glm::vec3(1.0f, 0.0f, 0.0f));
 	//Game Loop
 	while (!glfwWindowShouldClose(window)) {
+		glm::vec2 displayDimensions = glm::vec2(width, height);
 		display.getFrames();
 		display.setDeltaTime();
 		//display.setDeltaTime();
@@ -242,7 +236,7 @@ int main() {
 
 		//Camera usage
 		display.initDisplay();
-		display.useShader(shader, camera);
+		display.useShader(shader, camera, displayDimensions);
 
 
 		double posX, posY;
@@ -313,7 +307,7 @@ int main() {
 				}
 			}
 			//testLine.render(glm::vec2(0, 0), glm::vec2(width, height));
-			testText.render(glm::vec2(width, height));
+			testText.render(displayDimensions);
 
 		}	
 
